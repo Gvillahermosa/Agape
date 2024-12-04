@@ -1,0 +1,297 @@
+@font-face {
+    font-family: 'Roblox';
+    src: url('../fonts/Roblox\ Font\ Regular.ttf/') format('truetype');
+}
+body{
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    color: white;
+    text-align: center;
+}
+.header{
+    background: linear-gradient(90deg, #991D1D, #FF914D);
+    color: white;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+    font-weight: bold;
+}
+.account-icon{
+    margin-right: 10px;
+}
+.account-icon img{
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+}
+.title{
+    font-size: 45px;
+    font-weight: bold;
+    margin-right: auto;
+    margin-left: 15px;
+    font-family: 'Roblox';
+}
+.menu{
+    display: flex;
+    gap: 30px;
+    margin-left: 100px;
+}
+.menu a{
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    padding: 10px;
+    border-bottom: 2px solid transparent;
+    transition: border-bottom 0.3s;
+}
+.menu a:hover{
+    border-bottom: 2px solid white;
+}
+.container{
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+.image2{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+.content{
+    margin-top: 100px;
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+}
+
+h2{
+    font-size: 3em;
+    margin-bottom: 20px;
+}
+.mood-selector{
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    margin-top: 30px;
+}
+.mood-selector button{
+    background-color: #fff;
+    color: #ffffff;
+    border: none;
+    padding: 15px 50px;
+    border-radius: 30px;
+    font-size: 30px;
+    cursor: pointer;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.1);
+
+}
+
+.mood-selector button:hover{
+    transform: scale(1.2);
+    transition: transform .2s;
+}
+
+.wrapper{
+    padding: 35px;
+    position: relative;
+    max-width: 1070px;
+    overflow-x: hidden;
+}
+
+.wrapper .icon{
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 120px;
+    display: flex;
+    align-items: center;
+}
+
+.icon:first-child{
+    left: 0;
+}
+
+.icon:last-child{
+    right: 0;
+    justify-content: flex-end;
+}
+
+.icon i {
+    width: 55px;
+    height: 55px;
+    cursor: pointer;
+    text-align: center;
+    line-height: 55px;
+    /* border-radius: 50%;
+    background: #d8d5f2; */
+    font-size: 30px;
+}
+
+
+.icon:first-child i{
+    margin-left: -20px;
+}
+.icon:last-child i{
+    margin-right: -20px;
+}
+
+.wrapper .tabs-box{
+    display: flex;
+    gap: 25px;
+    list-style: none;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    overflow-y: hidden;
+    padding: 10px 25px;
+}
+
+.tabs-box.dragging {
+    scroll-behavior: auto;
+    cursor: grab;
+}
+
+.tabs-box .tab{
+    cursor: pointer;
+    white-space: nowrap;
+    background: #ffffff;
+    border-radius: 30px;
+    border: 1px solid #d8d5f2;
+    color: #ffffff;
+    border: none;
+    padding: 15px 50px;
+    font-size: 30px;
+    cursor: pointer;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.1);
+    transition: transform .2s;
+}
+
+.tabs-box .tab a{
+    text-decoration: none;
+    color: #fff;
+}
+
+.tabs-box .tab:hover{
+    transform: scale(1.2);
+    transition: transform .2s;
+}
+
+.tabs-box.dragging .tab{
+    user-select: none;
+}
+
+.selected-verse{
+    font-family: Inter;
+    margin-top: 55px;
+    font-size: 25px;
+}
+
+
+/* for submenu in  the profile */
+
+.sub-menu-wrap{
+    position: absolute;
+    top: 100%;
+    right: 79%;
+    width: 320px;
+    max-height: 0px;
+    overflow: hidden;
+    transition: max-height 0.5s;
+
+}
+
+.sub-menu-wrap.open-menu{
+    max-height: 400px;
+}
+
+.sub-menu{
+    border-radius: 10px;
+    background: #fff;
+    padding: 20px;
+    margin: 10px;
+}
+.sub-menu h2{
+    color: #000000;
+}
+
+.user-info{
+    display:flex ;
+    align-items: center;
+}
+
+.user-info h2{
+    font-size: 1.5em;
+    font-weight: 500;
+}
+
+.user-info img{
+    width: 60px;
+    border-radius: 50%;
+    margin-right: 15px;
+    cursor: pointer;
+}
+
+.sub-menu hr{
+    border: 0;
+    height: 1px;
+    width: 100%;
+    background: #ccc;
+    margin: 15px 0 10px;
+}
+
+.sub-menu-link{
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #525252;
+    margin: 12px 0;
+}
+
+.sub-menu-link p{
+    font-size: 1em;
+    width: 100%;
+    font-weight: 100;
+}
+
+.sub-menu-link img{
+    width: 25px;
+    background: #e5e5e5;
+    border-radius: 50%;
+    padding: 8px;
+    margin-right: -50px;
+}
+
+.sub-menu-link span {
+    font-size: 22px;
+    transition: transform 0.5s;
+    font-weight: 100;
+}
+
+.sub-menu-link:hover span{
+    transform: translate(5px);
+}
+
+.sub-menu-link:hover p{
+    font-weight: 600;
+}
+
+.Edit-profile{
+    margin-left: -5px;
+    margin-right: 50px;
+}
+
+.Logout{
+    margin-left: -40px;
+    margin-right: 50px;
+}

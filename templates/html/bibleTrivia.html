@@ -1,0 +1,70 @@
+{% extends "html/header.html" %}
+{% load static %}
+{% block title %} Bible Trivia {% endblock %}
+{% block additional_css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="stylesheet" href="{% static 'css/bibleTrivia.css' %}">
+{% endblock %}
+{% block bodycontents %}
+    <div class="main-contents">
+        <h1>Bible Trivia</h1>
+        <div class="carousel">
+        <div class="carousel-text">
+        <div id="carousel-content">
+            <!-- This content will change dynamically -->
+            The Bible is composed of 66 books. The Protestant Bible contains 39 books in the Old Testament and 27 in the New Testament, written over a period of about 1,500 years by around 40 different authors.
+        </div>
+        </div>
+        <div class="controls">
+            <button id="prev" onclick="showPrevious()">← Previous</button>
+            <span id="counter">1/10</span>
+            <button id="next" onclick="showNext()">Next →</button>
+        </div>
+
+    </div>
+    <script>
+        // Array of trivia
+const trivia = [
+    "The Bible is composed of 66 books. The Protestant Bible contains 39 books in the Old Testament and 27 in the New Testament, written over a period of about 1,500 years by around 40 different authors.",
+    "The shortest verse in the Bible is John 11:35: 'Jesus wept.'",
+    "The Bible has been translated into over 700 languages.",
+    "Moses is traditionally credited with writing the first five books of the Bible.",
+    "The word 'Bible' comes from the Greek word 'biblia', meaning 'books.'",
+    "Psalm 119 is the longest chapter in the Bible.",
+    "The Bible was the first book ever printed on a printing press.",
+    "The New Testament contains 27 books, starting with the Gospel of Matthew.",
+    "The Bible is the best-selling book of all time.",
+    "The Bible has been divided into chapters and verses for easy reference since the 13th century."
+];
+
+// Variables to track the current trivia and total number
+let currentIndex = 0;
+const totalTrivia = trivia.length;
+
+// Update the content and counter
+function updateContent() {
+    document.getElementById("carousel-content").innerText = trivia[currentIndex];
+    document.getElementById("counter").innerText = `${currentIndex + 1}/${totalTrivia}`;
+}
+
+// Show the next trivia
+function showNext() {
+    if (currentIndex < totalTrivia - 1) {
+        currentIndex++;
+        updateContent();
+    }
+}
+
+// Show the previous trivia
+function showPrevious() {
+    if (currentIndex > 0) {
+        currentIndex--;
+        updateContent();
+    }
+}
+
+// Initialize the carousel with the first trivia
+document.addEventListener("DOMContentLoaded", updateContent);
+
+    </script>
+{% endblock %}

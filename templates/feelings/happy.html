@@ -1,0 +1,125 @@
+{% extends "../html/header.html" %}
+{% load static %}
+
+{% block title %}
+    Mood Bible Verse
+{% endblock %}
+
+{% block additional_css %}
+<link rel="stylesheet" href="{% static 'css/moods.css' %}">
+<link rel="stylesheet" href="{% static 'css/swiper-bundle.min.css' %}" />
+{% endblock %}
+
+{% block bodycontents %}
+    <img src="{% static 'images/image2.jpg' %}" alt="Prayer Image" class="image2">
+    <div class="content">
+        <h1 class="upper-content">Here's a verse for when you're feeling Happy:</h1>
+        <section class="container">
+            <div class="testimonial mySwiper">
+              <div class="testi-content swiper-wrapper">
+                <!-- Slide 1 -->
+                <div class="slide swiper-slide">
+                  <p>
+                    "This is the day the Lord has made; let us rejoice and be glad in it." - Psalm 118:24
+                  </p>
+
+                  <div class="details">
+                    <button type="submit"><a href="{% url 'findyourverse' %}">Choose Another Mood</a></button>
+                    <div class="icon-container">
+                      <span class="mdi--heart-outline"></span>
+                      <span class="fontisto--favorite"></span>
+                      <button class="share-btn">
+                        <span class="solar--share-linear"></span> <!-- Share icon -->
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <!-- Slide 2 -->
+                <div class="slide swiper-slide">
+                  <p>
+                    "Rejoice in the Lord always. I will say it again: Rejoice!" - Philippians 4:4
+                  </p>
+
+                  <i class="bx bxs-quote-alt-left quote-icon"></i>
+
+                  <div class="details">
+                    <button type="submit"><a href="{% url 'findyourverse' %}">Choose Another Mood</a></button>
+                    <div class="icon-container">
+                      <span class="mdi--heart-outline"></span>
+                      <span class="fontisto--favorite"></span>
+                      <button class="share-btn">
+                        <span class="solar--share-linear"></span> <!-- Share icon -->
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <!-- Slide 3 -->
+                <div class="slide swiper-slide">
+                  <p>
+                    "A cheerful heart is good medicine, but a crushed spirit dries up the bones." - Proverbs 17:22
+                  </p>
+
+                  <i class="bx bxs-quote-alt-left quote-icon"></i>
+
+                  <div class="details">
+                    <button type="submit"><a href="{% url 'findyourverse' %}">Choose Another Mood</a></button>
+                    <div class="icon-container">
+                      <span class="mdi--heart-outline"></span>
+                      <span class="fontisto--favorite"></span>
+                      <button class="share-btn">
+                        <span class="solar--share-linear"></span> <!-- Share icon -->
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <!-- Slide 4 -->
+                <div class="slide swiper-slide">
+                    <p>
+                        "May the God of hope fill you with all joy and peace as you trust in him." - Romans 15:13
+                    </p>
+
+                    <i class="bx bxs-quote-alt-left quote-icon"></i>
+
+                    <div class="details">
+                        <button type="submit"><a href="{% url 'findyourverse' %}">Choose Another Mood</a></button>
+                        <div class="icon-container">
+                            <span class="mdi--heart-outline"></span>
+                            <span class="fontisto--favorite"></span>
+                            <button class="share-btn">
+                              <span class="solar--share-linear"></span> <!-- Share icon -->
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Slide 5 -->
+                <div class="slide swiper-slide">
+                    <p>
+                        "You make known to me the path of life; in your presence there is fullness of joy; at your right hand are pleasures forevermore." - Psalm 16:11
+                    </p>
+
+                    <i class="bx bxs-quote-alt-left quote-icon"></i>
+
+                    <div class="details">
+                        <button type="submit"><a href="{% url 'findyourverse' %}">Choose Another Mood</a></button>
+                        <div class="icon-container">
+                            <span class="mdi--heart-outline"></span>
+                            <span class="fontisto--favorite"></span>
+                            <button class="share-btn">
+                                <span class="solar--share-linear"></span> <!-- Share icon -->
+                            </button>
+                        </div>
+                    </div>
+                </div>
+              </div>
+              <!-- Swiper Navigation and Pagination -->
+              <div class="swiper-button-next nav-btn"></div>
+              <div class="swiper-button-prev nav-btn"></div>
+              <div class="swiper-pagination"></div>
+            </div>
+          </section>
+    </div>
+
+    <!-- Include Swiper JS and Custom JS -->
+    <script src="{% static 'javascript/swiper-bundle.min.js' %}"></script>
+    <script src="{% static 'javascript/moods.js' %}"></script>
+{% endblock %}

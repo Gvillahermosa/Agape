@@ -1,0 +1,210 @@
+body::-webkit-scrollbar{
+    display: none;
+ }
+
+
+.content {
+    display: flex;
+  }
+  .sidebar {
+    position: absolute;
+    background-color: #A52B23;
+    color: white;
+    width: 310px;
+    height: 950px;
+    top: -100px;
+    left: 0;
+    padding: 20px;
+    box-sizing: border-box;
+    font-size: 20px;
+}
+
+.sidebar h3 {
+    margin-right: 90px;
+    margin-top: -10px;
+}
+
+.sidebar a {
+    color: white; /* Link color */
+    text-decoration: none; /* Remove underline */
+    margin-bottom: 10px; /* Space between links */
+    margin-left: 10px; /* Indentation for links */
+    display: block; /* Make links block elements for full width */
+    padding: 5px; /* Add padding to the links for consistency */
+    transition: background-color 0.3s, border 0.3s; /* Smooth transition for background and border */
+}
+
+#compose{
+    margin-left: -5px;
+}
+
+.sidebar a:hover {
+    background-color: rgba(255, 255, 255, 0.2); /* Light shade on hover */
+    border-left: 4px solid white; /* Add a border on the left */
+    width: 120%;
+}
+
+  .header-container {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    margin-left: 150px;
+    padding-right: 20px;
+    margin-top: -120px;
+    font-size: 25px; /* Font size for Gabriel's Journal */
+}
+
+.header-container header {
+
+
+    align-items: center;
+}
+
+header h1 {
+    font-size: 35px;
+    margin-right: -30px;
+    margin-left: 200px;
+    color: black;
+}
+
+.search-container {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+
+    margin-top: 20px;
+    margin-left: 100px;
+}
+
+.search-container input {
+    padding: 10px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    width: 100%;
+    max-width: 200px;
+    margin-left: 385px;
+    font-size: 20px;
+    margin-right: 20px;
+}
+
+.search-btn {
+    position: absolute;
+    margin-left: 555px;
+    background-color: #FFF;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 3px;
+    font-size: 23px;
+}
+
+.new-journal {
+    padding: 10px 20px;
+    background-color:  #991D1D;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 15px;
+    font-size: 25px;
+    transition: transform .2s;
+}
+
+.new-journal:hover{
+    transform: scale(1.1);
+    transition: transform .2s;
+}
+
+.new-journal a{
+    color: white;
+    text-decoration: none;
+}
+
+
+.entries-info {
+    position: absolute;
+    margin-left: 350px;
+    margin-bottom: 20px;
+    font-size: 18px;
+    color: #333;
+    margin-top: -60px;
+}
+.journal-list {
+    margin-top: 20px;
+    background-color: #991D1D; /* Container background */
+    padding: 20px;
+    border-radius: 10px; /* Rounded corners */
+    margin-left: 350px; /* Margin to align with the sidebar */
+    color: white; /* Text color for visibility */
+    width: 1100px;
+    border-bottom: 1px solid #ccc; /* Bottom border for entries */
+}
+
+.journal-entry-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr 50px; /* Columns for title, date, and favorite */
+    align-items: center; /* Vertically center content */
+    margin-bottom: 10px; /* Space below header */
+    margin-right: 40px;
+    font-size: 25px;
+}
+
+.journal-entries {
+    display: flex;
+    flex-direction: column; /* Stack entries vertically */
+}
+.journal-entry {
+    display: grid;
+    grid-template-columns: 30px 1fr 1fr 50px; /* Added a column for the checkbox */
+    align-items: center; /* Vertically center content */
+    padding: 10px 0; /* Padding for each entry */
+    border-bottom: 1px solid #ccc; /* Bottom border for entries */
+}
+
+
+.radix-icons--magnifying-glass {
+    position: absolute;
+    margin-top: 2px;
+    margin-left: -625px;
+    width: 1.3em;
+    height: 1.3em;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 15 15'%3E%3Cpath fill='black' fill-rule='evenodd' d='M10 6.5a3.5 3.5 0 1 1-7 0a3.5 3.5 0 0 1 7 0m-.691 3.516a4.5 4.5 0 1 1 .707-.707l2.838 2.837a.5.5 0 0 1-.708.708z' clip-rule='evenodd'/%3E%3C/svg%3E");
+  }
+
+
+
+  .journalTable th{
+    font-size: 25px;
+  }
+
+  .journalTable td{
+    padding: 8px;
+    font-size: 20px;
+  }
+
+  #checkbox {
+    width: 20px; /* Set the desired width */
+    height: 20px; /* Set the desired height */
+}
+
+.emojione-monotone--star {
+    display: inline-block;
+    width: 1.2em;
+    height: 1.2em;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath fill='white' d='M62 25.154H39.082L32 3l-7.082 22.154H2l18.541 13.693L13.459 61L32 47.309L50.541 61l-7.082-22.152z'/%3E%3C/svg%3E");
+  }
+
+  .delete-btn{
+    background-color: #cc3333;
+    color: white;
+    padding: 8px 8px;
+    border-radius: 10px;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+  }

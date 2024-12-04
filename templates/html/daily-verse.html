@@ -1,0 +1,33 @@
+{% extends "html/header.html" %}
+{% load static %}
+
+{% block title %}
+    Daily Verse
+{% endblock %}
+
+{% block additional_css %}
+<link rel="stylesheet" href="{% static 'css/dailyverse.css' %}">
+{% endblock %}
+
+{% block bodycontents %}
+
+    <h1>Verse of the Day</h1>
+
+    <div class="content">
+        <p>{% now "F j, Y" %}</p>
+    </div>
+    <div class="lower-content">
+        <div class="verse">
+        {% if verse %}
+            <p>"{{ verse.verse_text }}</p>
+            <p class="reference"><strong>-{{ verse.reference }}</strong></p>
+        {% else %}
+            <p>No verse available for today.</p>
+        {% endif %}
+        </div>
+    </div>
+    <div class="reflection-content">
+        <p>Reflection</p>
+        <span class="reflection">{{ verse.reflection }}</span>
+    </div>
+{% endblock %}

@@ -1,0 +1,118 @@
+{% extends "../html/header.html" %}
+{% load static %}
+
+{% block title %}
+    Mood Bible Verse
+{% endblock %}
+
+{% block additional_css %}
+<link rel="stylesheet" href="{% static 'css/moods.css' %}">
+<link rel="stylesheet" href="{% static 'css/swiper-bundle.min.css' %}" />
+{% endblock %}
+
+{% block bodycontents %}
+    <img src="{% static 'images/image2.jpg' %}" alt="Prayer Image" class="image2">
+    <div class="content">
+        <h1 class="upper-content">Here's a verse for when you're feeling Hopeful:</h1>
+        <section class="container">
+            <div class="testimonial mySwiper">
+              <div class="testi-content swiper-wrapper">
+                <div class="slide swiper-slide">
+                  <p>
+                    "For I know the plans I have for you," declares the Lord, "plans to prosper you and not to harm you, plans to give you hope and a future." - Jeremiah 29:11
+                  </p>
+
+                  <div class="details">
+                        <button type="submit"><a href="{% url 'findyourverse' %}"> Choose Another Mood </a></button>
+                        <div class="icon-container">
+                        <span class="mdi--heart-outline"></span>
+                        <span class="fontisto--favorite"></span>
+                        <button class="share-btn">
+                        <span class="solar--share-linear"></span> <!-- Share icon -->
+                        </button>
+                        </div>
+                  </div>
+                </div>
+                <div class="slide swiper-slide">
+                  <p>
+                    "But those who hope in the Lord will renew their strength. They will soar on wings like eagles; they will run and not grow weary, they will walk and not be faint." - Isaiah 40:31
+                  </p>
+
+                  <i class="bx bxs-quote-alt-left quote-icon"></i>
+
+                  <div class="details">
+                    <button type="submit"><a href="{% url 'findyourverse' %}"> Choose Another Mood </a></button>
+                    <div class="icon-container">
+                    <span class="mdi--heart-outline"></span>
+                    <span class="fontisto--favorite"></span>
+                    <button class="share-btn">
+                    <span class="solar--share-linear"></span> <!-- Share icon -->
+                    </button>
+                    </div>
+              </div>
+                </div>
+                <div class="slide swiper-slide">
+                  <p>
+                    "May the God of hope fill you with all joy and peace as you trust in Him, so that you may overflow with hope by the power of the Holy Spirit." - Romans 15:13
+                  </p>
+
+                  <i class="bx bxs-quote-alt-left quote-icon"></i>
+
+                  <div class="details">
+                    <button type="submit"><a href="{% url 'findyourverse' %}"> Choose Another Mood </a></button>
+                    <div class="icon-container">
+                    <span class="mdi--heart-outline"></span>
+                    <span class="fontisto--favorite"></span>
+                    <button class="share-btn">
+                    <span class="solar--share-linear"></span> <!-- Share icon -->
+                    </button>
+                    </div>
+              </div>
+                </div>
+                <div class="slide swiper-slide">
+                    <p>
+                      "We have this hope as an anchor for the soul, firm and secure." - Hebrews 6:19
+                    </p>
+
+                    <i class="bx bxs-quote-alt-left quote-icon"></i>
+
+                    <div class="details">
+                        <button type="submit"><a href="{% url 'findyourverse' %}"> Choose Another Mood </a></button>
+                        <div class="icon-container">
+                        <span class="mdi--heart-outline"></span>
+                        <span class="fontisto--favorite"></span>
+                        <button class="share-btn">
+                        <span class="solar--share-linear"></span> <!-- Share icon -->
+                        </button>
+                        </div>
+                  </div>
+                  </div>
+                  <div class="slide swiper-slide">
+                    <p>
+                      "Be strong and take heart, all you who hope in the Lord." - Psalm 31:24
+                    </p>
+
+                    <i class="bx bxs-quote-alt-left quote-icon"></i>
+
+                    <div class="details">
+                        <button type="submit"><a href="{% url 'findyourverse' %}"> Choose Another Mood </a></button>
+                        <div class="icon-container">
+                        <span class="mdi--heart-outline"></span>
+                        <span class="fontisto--favorite"></span>
+                        <button class="share-btn">
+                        <span class="solar--share-linear"></span> <!-- Share icon -->
+                        </button>
+                        </div>
+                  </div>
+                  </div>
+              </div>
+              <div class="swiper-button-next nav-btn"></div>
+              <div class="swiper-button-prev nav-btn"></div>
+              <div class="swiper-pagination"></div>
+            </div>
+          </section>
+    </div>
+
+    <script src="{% static 'javascript/swiper-bundle.min.js' %} "></script>
+    <script src="{% static 'javascript/moods.js' %}"></script>
+{% endblock %}

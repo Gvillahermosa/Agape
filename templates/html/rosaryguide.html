@@ -1,0 +1,177 @@
+{% extends "html/header.html" %}
+{% load static %}
+
+{% block title %}
+    Rosary Guide
+{% endblock %}
+
+{% block additional_css %}
+<link href="https://fonts.googleapis.com/css2?family=Lora&family=Roboto:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/rosaryguide.css' %}">
+{% endblock %}
+
+
+{% block bodycontents %}
+<div class="main-contents">
+    <h1>Why do we Pray the Rosary</h1>
+    <p>
+        The purpose of the Rosary is to help keep in memory certain principal events in the history of our salvation.There are twenty mysteries reflected upon in the Rosary, and these are divided into the five <em>Joyful Mysteries(said on Monday and Saturday)</em>, the <em>five Luminous Mysteries (said on Thursday)</em>, the five Sorrowful Mysteries said on Tuesday and Friday), and the <em>five Glorious Mysteries (said on Wednesday and Sunday)</em>. As an excention the Joyful Mysteries may be said on Sundays during Advent and Christmas, while the Sorrowful Mysteries may be said on the Sundays of Lent.
+
+ The question is sometimes asked, why, of all the incidents in our Lord's life, the Rosary only considers these particular twenty. The mysteries of the Rosary are based on the incidents in the life of Our Lord and His Mother that are celebrated in the Liturgy. There is a parallel between the main feasts honoring our Lord and his Mother in the liturgical year, and when twenty mysteries of the Rosary. Consequently, one who reccites the twenty mysteries of the Rosary in one day reflects on the whole liturgical cycle that the Church commemorates during the course of each year. That is why some of the Popes have referred to the Rosary as a compendium of the Gospel. One cannot change the mysteries of the Rosary without losing the indulgences that the Church grants for the recitation of the Rosary.
+    </p>
+</div>
+
+<div class="lower-contents">
+    <h1>Guide on Praying the Rosary</h1>
+    <div class="first-container">
+        <div class="video">
+            <video id="myVideo" width="640" height="360" poster="{% static 'images/thumbnail.png' %}">
+                <source src="{% static 'videos/The_Rosary_Part1.mp4' %}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <div id="playPauseIndicator" class="indicator" style="display: none;">⏸</div>
+        </div>
+        <div class="right-text">
+            <h2>The Rosary</h2>
+            <p>The rosary itself is composed of 60 beads laced together with a crucifix and a pendant of Mary where the 3 strands meet. We divide the Rosary into 6 segments. The 1st segment is composed of the introductory prayers and that is followed by 5 decades.</p>
+        </div>
+    </div>
+    <div class="second-container">
+        <div class="left-text">
+            <h2>The Sign of the Cross and The Apostles’ Creed</h2>
+            <h3>The Sign of the Cross</h3>
+            <p>In the name of the Father and of the Son and of the Holy Spirit. Amen.</p>
+
+            <h3>The Apostles’ Creed:</h3>
+            <p>I believe in God, the Father Almighty, creator of heaven and earth, and in Jesus Christ, his only Son, our Lord, who was conceived by the Holy Spirit, born of the Virgin Mary, suffered under Pontius Pilate, was crucified, died and was buried; he descended into hell; on the third day he rose again from the dead; he ascended into heaven, and is seated at the right hand of the God the Father Almighty; from there he will come again to judge the living and the dead. I believe in the Holy Spirit, the holy catholic Church, the communion of saints, the forgiveness of sins, the resurrection of the body, and life everlasting. Amen.</p>
+        </div>
+        <video id="myVideo2" width="640" height="360" poster="{% static 'images/thumbnail2.png' %}">
+            <source src="{% static 'videos/The_Rosary_Part2.mp4' %}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div id="playPauseIndicator" class="indicator" style="display: none;">⏸</div>
+    </div>
+
+    <div class="third-container">
+        <div class="video">
+            <video id="myVideo3" width="640" height="360" poster="{% static 'images/thumbnail3.png' %}">
+                <source src="{% static 'videos/The_Rosary_Part3.mp4' %}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <div id="playPauseIndicator" class="indicator" style="display: none;">⏸</div>
+        </div>
+        <div class="right-text">
+            <h2>Our Father, Hail Mary, and Glory Be</h2>
+            <h3>Our Father</h3>
+            <p>Our Father, who art in heaven, hallowed be thy name; thy kingdom come; thy will be done on earth as it is in heaven. Give us this day our daily bread; and forgive us our trespasses, as we forgive those who trespass against us; and lead us not into temptation, but deliver us from evil. Amen.</p>
+            <h3>Hail Mary</h3>
+            <p>Hail Mary, full of grace, the Lord is with thee. Blessed art thou among women, and blessed is the fruit of thy womb, Jesus. Holy Mary, Mother of God, pray for us sinners, now and at the hour of our death. Amen.</p>
+            <h3>Glory Be</h3>
+            <p>Glory be to the Father, and to the Son, and to the Holy Spirit. As it was in the beginning, is now, and ever shall be, world without end. Amen.</p>
+        </div>
+    </div>
+
+    <div class="fourth-container">
+        <div class="left-text">
+            <h2>Intentions</h2>
+            <p>After the introductory prayers and before the mystery is announced the leader of the group may announce an intention for this particular decade. The intention may be a person by name, a group of persons, a prayer for peace and justice, or some other worthy cause, or a prayer for the deceased.</p>
+            <p>Next, the leader will announce the mystery, for example, "The first sorrowful mystery is the agony in the garden." All twenty mysteries of the Rosary will follow the same three-step pattern, scripture, reflection and personal experience.</p>
+        </div>
+        <video id="myVideo4" width="640" height="360" poster="{% static 'images/thumbnail4.png' %}">
+            <source src="{% static 'videos/The_Rosary_Part4.mp4' %}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div id="playPauseIndicator" class="indicator" style="display: none;">⏸</div>
+    </div>
+
+    <div class="fifth-container">
+        <div class="video">
+            <video id="myVideo5" width="640" height="360" poster="{% static 'images/thumbnail5.png' %}">
+                <source src="{% static 'videos/The_Rosary_Part5.mp4' %}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <div id="playPauseIndicator" class="indicator" style="display: none;">⏸</div>
+        </div>
+        <div class="right-text">
+            <h2>Hail Holy Queen</h2>
+            <p>Hail, Holy Queen, Mother of Mercy, our life, our sweetness, and our hope. To thee do we cry, poor banished children of Eve: to thee do we send up our sighs, mourning and weeping in this valley of tears. Turn then, O most gracious Advocate, thine eyes of mercy toward us, and after this, our exile, show unto us the blessed fruit of thy womb, Jesus. O clement, O loving, O sweet Virgin Mary! Pray for us, O Holy Mother of God, that we may be made worthy of the promises of Christ. Amen.</p>
+        </div>
+    </div>
+    <div class="facts-section">
+        <h2>Facts About the Rosary</h2>
+
+        <div class="fact">
+            <h3>Praying the Rosary</h3>
+            <p>Don't worry about how "well" you pray the Rosary. Just pray it. As with anything new, you may stumble at first, but it will soon become natural, and you'll begin to miss it if you skip it! Give the Rosary a try and pray one decade today!</p>
+        </div>
+
+        <div class="fact">
+            <h3>Keep it Simple and Manageable</h3>
+            <p>Praying the Rosary doesn't have to happen in a quiet chapel before Mass. You can pray it with your family in the car, around the dinner table, or right before bed. We know you're busy, so let prayer naturally fit into your daily schedule.</p>
+        </div>
+
+        <div class="fact">
+            <h3>Rosary Facts</h3>
+            <p>There are four sets of Mysteries: Joyful, Luminous, Sorrowful, and Glorious. The Mysteries tell the story of Christ's life through his Mother Mary's eyes.</p>
+        </div>
+
+        <div class="fact">
+            <h3>Daily Mysteries</h3>
+            <p>Each day of the week is assigned a set of Mysteries to pray that day. The Joyful Mysteries are prayed on Monday and Saturday, the Luminous on Thursday, the Sorrowful on Tuesday and Friday, and the Glorious on Wednesday and Sunday. But you can pray them any day you wish. Whatever works best for you and your family.</p>
+        </div>
+    </div>
+
+    <div class="space">
+         .
+    </div>
+
+
+
+
+</div>
+
+
+<script>
+   document.addEventListener("DOMContentLoaded", function () {
+    const video1 = document.getElementById("myVideo");
+    const video2 = document.getElementById("myVideo2");
+    const video3 = document.getElementById("myVideo3");
+    const video4 = document.getElementById("myVideo4");
+    const video5 = document.getElementById("myVideo5");
+    const indicator1 = document.getElementById("playPauseIndicator");
+
+    // Attach play/pause functionality to both videos
+    handleVideo(video1, indicator1); // Existing video
+    handleVideo(video2, indicator1); // New video without an indicator
+    handleVideo(video3, indicator1); // New video without an indicator
+    handleVideo(video4, indicator1); // New video without an indicator
+    handleVideo(video5, indicator1); // New video without an indicator
+
+    // Function to handle play/pause for individual videos
+    function handleVideo(video, indicator) {
+        video.addEventListener("click", function () {
+            if (video.paused) {
+                video.play(); // Play the video
+                if (indicator) showIndicator(indicator, "▶"); // Display "Play" icon
+            } else {
+                video.pause(); // Pause the video
+                if (indicator) showIndicator(indicator, "⏸"); // Display "Pause" icon
+            }
+        });
+    }
+
+    // Show the play/pause indicator briefly
+    function showIndicator(indicator, icon) {
+        indicator.textContent = icon;
+        indicator.style.display = "flex";
+        setTimeout(() => {
+            indicator.style.display = "none";
+        }, 500); // Hide indicator after 500ms
+    }
+});
+
+
+</script>
+
+
+{% endblock %}

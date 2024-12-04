@@ -1,0 +1,210 @@
+
+body::-webkit-scrollbar{
+    display: none;
+}
+
+body {
+    background-color: #fff4e6; /* Very Light Orange */
+    color: #333; /* Dark gray text color */
+
+}
+
+.main-contents {
+    font-family: 'Lora', serif; /* Main body text */
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 20px;
+    line-height: 1.6; /* Adjust for better readability */
+    margin: 20px; /* Add some margin around content */
+    width: 90%;
+    height: 700px;
+    flex-shrink: 0;
+    justify-content: center;
+}
+
+p{
+    font-family: Century Gothic;
+    font-size: 18px;
+    line-height: 1.6;
+    padding-left: 90px;
+    padding-right: 90px;
+}
+
+h1,h2 {
+    font-size: 40px;
+    font-family: 'Roboto', sans-serif; /* Headings */
+    font-weight: 700;  /* Bold headings */
+    color: #553000; /* Darker orange to coordinate with the nav bar */
+    margin-bottom: 15px; /* Space below headings */
+}
+
+/* Example for paragraph styles */
+p {
+    margin-bottom: 1em;
+}
+
+
+.lower-contents{
+    font-family: 'Lora', serif; /* Main body text */
+    position: absolute;
+    top: 140%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 20px;
+    line-height: 1.6; /* Adjust for better readability */
+    margin: 20px; /* Add some margin around content */
+    width: 90%;
+    height: 700px;
+    flex-shrink: 0;
+    justify-content: center;
+}
+.first-container {
+    display: flex; /* Enable flexbox */
+    gap: 20px; /* Space between video and text */
+}
+
+.video {
+    width: 100%; /* Or a specific width */
+    max-width: 640px; /* Limit width for responsiveness */
+    margin: 20px auto; /* Center the video */
+    position: relative;
+    display: inline-block;
+    flex: 1; /* Allow video to take up equal available space */
+}
+
+#myVideo{
+
+    border-radius: 20px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+#myVideo2{
+    margin-top: 250px;
+    border-radius: 20px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+#myVideo3{
+    margin-top: 200px;
+    border-radius: 20px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+#myVideo4{
+    margin-top: 150px;
+    border-radius: 20px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+#myVideo5{
+    margin-top: 50px;
+    border-radius: 20px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+}
+.indicator {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 48px;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 10px 20px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none; /* Prevent indicator from interfering with clicks */
+}
+
+
+.indicator.show {
+    opacity: 1; /* Fully visible */
+    transform: translate(-50%, -50%) scale(1); /* Scale up smoothly */
+}
+
+.right-text {
+    flex: 1;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+}
+
+.right-text h2{
+    margin-left: 80px;
+    margin-bottom: -10px;
+}
+
+.second-container{
+    margin-top: 130px;
+    display: flex;
+    gap: 20px;
+}
+
+.left-text{
+    flex: 1;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+}
+
+
+.third-container{
+    display: flex;
+    gap: 20px;
+}
+
+.third-container h2{
+    margin-left: -10px;
+}
+
+.fourth-container{
+    display: flex; /* Enable flexbox */
+    gap: 20px; /* Space between video and text */
+}
+
+
+.fifth-container{
+    margin-bottom: 200px;
+    margin-top: 250px;
+    display: flex; /* Enable flexbox */
+    gap: 20px; /* Space between video and text */
+}
+
+
+.facts-section {
+
+    background-color: #fff; /* Light background to distinguish the section */
+    padding: 20px; /* Add some padding for spacing */
+    border-radius: 15px; /* Round the corners */
+    margin: 20px 0; /* Space above and below the section */
+}
+
+.facts-section h2 {
+    font-size: 28px; /* Header size */
+    color: #333; /* Dark gray */
+}
+
+.fact {
+    margin: 15px 0; /* Spacing between facts */
+}
+
+.fact h3 {
+    font-size: 22px; /* Subheader size */
+    color: #007bff; /* Change color to blue */
+}
+
+.fact p {
+    font-size: 16px; /* Paragraph size */
+    color: #555; /* Medium gray */
+    line-height: 1.5; /* Add spacing for readability */
+}
+
+
+.space{
+    margin-top: 25px;
+}

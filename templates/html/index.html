@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="icon" href="{% static 'images/logo.png' %}" sizes="64x64" type="image/png">
+    <title>AGAPE</title>
+</head>
+
+<body>
+
+    <div class="container" id="container" data-show-signup="{{ show_signup|default:'False' }}">
+        <div class="form-container sign-up">
+            <form action="{% url 'signup' %}" method="post">
+                {% csrf_token %}
+                <h1  class="title2">AGAPE</h1>
+                <div class="inputBox">
+                    {% if messages %}
+                    {% for message in messages %}
+                        {% if 'signup' in message.tags %}
+                        <div class="alert-container">
+                            <div class="alert alert-{{ message.level_tag }}">{{ message }}</div>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+                <input type="text" id="username" name="username" required>
+                <span>Username</span>
+                </div>
+                <div class="inputBox">
+                <input type="text" id="fname" name="fname" required>
+                <span>First name</span>
+                </div>
+                <div class="inputBox">
+                <input type="text" id="lname" name="lname" required>
+                <span>Last name</span>
+                </div>
+                <div class="inputBox">
+                <input type="email" id="email" name="email" required>
+                <span>Email</span>
+                </div>
+                <div class="inputBox">
+                <input type="password" id="pass1" name="pass1" required>
+                <span>Password</span>
+                </div>
+                <div class="inputBox">
+                <input type="password" id="pass2" name="pass2" required>
+                <span>Confirm your password</span>
+                </div>
+                <button>Sign Up</button>
+            </form>
+        </div>
+        <div class="form-container sign-in">
+            <form action="{% url 'signin' %}" method="post">
+                {% csrf_token %}
+                <h1  class="title">AGAPE</h1>
+                <div class="inputBox">
+                    {% if messages %}
+                        {% for message in messages %}
+                            {% if 'signin' in message.tags %}
+                            <div class="alert-container">
+                                <div class="alert alert-{{ message.level_tag }}">{{ message }}</div>
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                <input type="text" id="username" name="username" required>
+                <span>Username</span>
+                </div>
+                <div class="inputBox">
+                <input type="password" id="pass1" name="pass1" required>
+                <span>Password</span>
+                </div>
+                <a href="#">Forget Your Password?</a>
+                <button>Sign In</button>
+            </form>
+        </div>
+        <div class="toggle-container">
+            <div class="toggle">
+                <div class="toggle-panel toggle-left">
+                    <h1>Welcome Back!</h1>
+                    <p>Enter your personal details to use all of site features</p>
+                    <button class="hidden" id="login">Sign In</button>
+                </div>
+                <div class="toggle-panel toggle-right">
+                    <h1>Hello, Friend!</h1>
+                    <p>Register with your personal details to use all of site features</p>
+                    <button class="hidden" id="register">Sign Up</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'javascript/script.js'%}"></script>
+</body>
+
+</html>

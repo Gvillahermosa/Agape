@@ -1,0 +1,118 @@
+{% extends "../html/header.html" %}
+{% load static %}
+
+{% block title %}
+    Mood Bible Verse
+{% endblock %}
+
+{% block additional_css %}
+<link rel="stylesheet" href="{% static 'css/moods.css' %}">
+<link rel="stylesheet" href="{% static 'css/swiper-bundle.min.css' %}" />
+{% endblock %}
+
+{% block bodycontents %}
+    <img src="{% static 'images/image2.jpg' %}" alt="Prayer Image" class="image2">
+    <div class="content">
+        <h1 class="upper-content">Here's a verse for when you're feeling Anxious:</h1>
+        <section class="container">
+            <div class="testimonial mySwiper">
+              <div class="testi-content swiper-wrapper">
+                <div class="slide swiper-slide">
+                  <p>
+                    "Cast all your anxiety on Him because He cares for you." - 1 Peter 5:7
+                  </p>
+
+                  <div class="details">
+                        <button type="submit"><a href="{% url 'findyourverse' %}"> Choose Another Mood </a></button>
+                        <div class="icon-container">
+                        <span class="mdi--heart-outline"></span>
+                        <span class="fontisto--favorite"></span>
+                        <button class="share-btn">
+                        <span class="solar--share-linear"></span> <!-- Share icon -->
+                        </button>
+                        </div>
+                  </div>
+                </div>
+                <div class="slide swiper-slide">
+                  <p>
+                    "Do not be anxious about anything, but in every situation, by prayer and petition, with thanksgiving, present your requests to God." - Philippians 4:6
+                  </p>
+
+                  <i class="bx bxs-quote-alt-left quote-icon"></i>
+
+                  <div class="details">
+                    <button type="submit"><a href="{% url 'findyourverse' %}"> Choose Another Mood </a></button>
+                    <div class="icon-container">
+                    <span class="mdi--heart-outline"></span>
+                    <span class="fontisto--favorite"></span>
+                    <button class="share-btn">
+                    <span class="solar--share-linear"></span> <!-- Share icon -->
+                    </button>
+                    </div>
+              </div>
+                </div>
+                <div class="slide swiper-slide">
+                  <p>
+                    "When anxiety was great within me, your consolation brought me joy." - Psalm 94:19
+                  </p>
+
+                  <i class="bx bxs-quote-alt-left quote-icon"></i>
+
+                  <div class="details">
+                    <button type="submit"><a href="{% url 'findyourverse' %}"> Choose Another Mood </a></button>
+                    <div class="icon-container">
+                    <span class="mdi--heart-outline"></span>
+                    <span class="fontisto--favorite"></span>
+                    <button class="share-btn">
+                    <span class="solar--share-linear"></span> <!-- Share icon -->
+                    </button>
+                    </div>
+              </div>
+                </div>
+                <div class="slide swiper-slide">
+                    <p>
+                      "Therefore do not worry about tomorrow, for tomorrow will worry about itself. Each day has enough trouble of its own." - Matthew 6:34
+                    </p>
+
+                    <i class="bx bxs-quote-alt-left quote-icon"></i>
+
+                    <div class="details">
+                        <button type="submit"><a href="{% url 'findyourverse' %}"> Choose Another Mood </a></button>
+                        <div class="icon-container">
+                        <span class="mdi--heart-outline"></span>
+                        <span class="fontisto--favorite"></span>
+                        <button class="share-btn">
+                        <span class="solar--share-linear"></span> <!-- Share icon -->
+                        </button>
+                        </div>
+                  </div>
+                  </div>
+                  <div class="slide swiper-slide">
+                    <p>
+                      "Peace I leave with you; my peace I give you. I do not give to you as the world gives. Do not let your hearts be troubled and do not be afraid." - John 14:27
+                    </p>
+
+                    <i class="bx bxs-quote-alt-left quote-icon"></i>
+
+                    <div class="details">
+                        <button type="submit"><a href="{% url 'findyourverse' %}"> Choose Another Mood </a></button>
+                        <div class="icon-container">
+                        <span class="mdi--heart-outline"></span>
+                        <span class="fontisto--favorite"></span>
+                        <button class="share-btn">
+                        <span class="solar--share-linear"></span> <!-- Share icon -->
+                        </button>
+                        </div>
+                  </div>
+                  </div>
+              </div>
+              <div class="swiper-button-next nav-btn"></div>
+              <div class="swiper-button-prev nav-btn"></div>
+              <div class="swiper-pagination"></div>
+            </div>
+          </section>
+    </div>
+
+    <script src="{% static 'javascript/swiper-bundle.min.js' %} "></script>
+    <script src="{% static 'javascript/moods.js' %}"></script>
+{% endblock %}

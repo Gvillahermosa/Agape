@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agape</title>
+    <link rel="stylesheet" href="{% static 'css/landing.css' %}">
+    <link rel="icon" href="{% static 'images/logo.png' %}" sizes="64x64" type="image/png">
+</head>
+<body>
+    <div class="container">
+        <div class="left-section">
+            <div class="logo">
+                {% if request.user.is_authenticated and profile_picture_url %}
+                <img src="{{ profile_picture_url }}" alt="Profile Picture" id="current-picture" class="user-icon" onclick="toggleMenu()">
+                {% endif %}
+
+                <h1>AGAPE</h1>
+                <div class="sub-menu-wrap" id="subMenu">
+                    <div class="sub-menu">
+                        <div class="user-info">
+                            <img src="{{ profile_picture_url }}" alt="Profile Picture">
+                        <h2>{{ fname }}</h2>
+                        </div>
+                        <hr>
+
+                        <a href="{% url 'editProfile' %}" class="sub-menu-link">
+                        <img src="{% static 'images/profile.png' %}" alt="profile">
+                        <p>Edit Profile</p>
+                        <span>></span>
+                        </a>
+
+                        <a href="{% url 'myLikes' %}" class="sub-menu-link">
+                        <img src="{% static 'images/bookmark.png' %}" alt="profile">
+                        <p>Bookmarked</p>
+                        <span>></span>
+                        </a>
+                        <a href="/signout" class="sub-menu-link">
+                        <img src="{% static 'images/logout.png' %}" alt="profile">
+                        <p>Logout</p>
+                        <span>></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content">
+                <h2>Find Peace in Scripture</h2>
+                <p>start your journey of spirituality with us in every step of the way</p>
+            </div>
+            <div class="button">
+                <button class="get-started-btn"><a href="{% url 'findyourverse' %}">GET STARTED</a></button>
+            </div>
+        </div>
+        <div class="right-section">
+            <nav>
+                <a href="{% url 'findyourverse' %}">FIND YOUR VERSE</a>
+                <a href="{% url 'journal' %}">JOURNAL</a>
+                <a href="{% url 'dailyverse' %}">VERSE OF THE DAY</a>
+                <a href="{% url 'bibleTrivia' %}">BIBLE TRIVIA</a>
+                <a href="{% url 'rosaryguide' %}">ROSARY GUIDE</a>
+            </nav>
+            <img src="{% static 'images/prayer.png' %}" alt="Prayer Image" class="prayer_img">
+        </div>
+    </div>
+    <div class="info">
+        <img src="{% static 'images/image2.jpg' %}" alt="Prayer Image" class="image2">
+        <div class="overlay">
+            <div class="message">
+                <h1>Reconnect with God, find your purpose.</h1>
+            </div>
+            <div class="cards">
+                <div class="card1">
+                    <img src="{% static 'images/openbook.png' %}" alt="open book">
+                    <h5>Read daily bible verses, along with ones that cater to your mood. </h5>
+                </div>
+                <div class="card2">
+                    <img src="{% static 'images/pen.png' %}" alt="pen">
+                    <h5>Write on a personal journal after every deep, meaningful session. </h5>
+                </div>
+                <div class="card3">
+                    <img src="{% static 'images/pray.png'%}" alt="pray">
+                    <h5>Pray and experience the love of God, with the help of our website. </h5>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{% static 'javascript/index.js' %}"></script>
+</body>
+</html>

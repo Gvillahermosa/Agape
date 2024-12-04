@@ -1,0 +1,119 @@
+{% extends "../html/header.html" %}
+{% load static %}
+
+{% block title %}
+    Mood Bible Verse
+{% endblock %}
+
+{% block additional_css %}
+<link rel="stylesheet" href="{% static 'css/moods.css' %}">
+<link rel="stylesheet" href="{% static 'css/swiper-bundle.min.css' %}" />
+{% endblock %}
+
+{% block bodycontents %}
+<img src="{% static 'images/image2.jpg' %}" alt="Prayer Image" class="image2">
+    <div class="content">
+        <h1 class="upper-content">Here's a verse for when you're feeling Sad:</h1>
+        <section class="container">
+            <div class="testimonial mySwiper">
+              <div class="testi-content swiper-wrapper">
+                <div class="slide swiper-slide">
+                  <p>
+                    "The Lord is close to the brokenhearted and saves those who are crushed in spirit." - Psalm 34:18
+                  </p>
+
+                  <div class="details">
+                        <button type="submit"><a href="{% url 'findyourverse' %}"> Choose Another Mood </a></button>
+                        <div class="icon-container">
+                        <span class="mdi--heart-outline"></span>
+                        <span class="fontisto--favorite"></span>
+                        <button class="share-btn">
+                        <span class="solar--share-linear"></span>
+                        </button>
+                        </div>
+                  </div>
+                </div>
+                <div class="slide swiper-slide">
+                  <p>
+                    "Cast all your anxiety on Him because He cares for you." - 1 Peter 5:7
+                  </p>
+
+                  <i class="bx bxs-quote-alt-left quote-icon"></i>
+
+                  <div class="details">
+                    <button type="submit"><a href="{% url 'findyourverse' %}"> Choose Another Mood </a></button>
+                    <div class="icon-container">
+                    <span class="mdi--heart-outline"></span>
+                    <span class="fontisto--favorite"></span>
+                    <button class="share-btn">
+                    <span class="solar--share-linear"></span>
+                    </button>
+                    </div>
+              </div>
+                </div>
+                <div class="slide swiper-slide">
+                  <p>
+                    "He heals the brokenhearted and binds up their wounds." - Psalm 147:3
+                  </p>
+
+                  <i class="bx bxs-quote-alt-left quote-icon"></i>
+
+                  <div class="details">
+                    <button type="submit"><a href="{% url 'findyourverse' %}"> Choose Another Mood </a></button>
+                    <div class="icon-container">
+                    <span class="mdi--heart-outline"></span>
+                    <span class="fontisto--favorite"></span>
+                    <button class="share-btn">
+                    <span class="solar--share-linear"></span>
+                    </button>
+                    </div>
+              </div>
+                </div>
+                <div class="slide swiper-slide">
+                    <p>
+                      "Come to me, all you who are weary and burdened, and I will give you rest." - Matthew 11:28
+                    </p>
+
+                    <i class="bx bxs-quote-alt-left quote-icon"></i>
+
+                    <div class="details">
+                        <button type="submit"><a href="{% url 'findyourverse' %}"> Choose Another Mood </a></button>
+                        <div class="icon-container">
+                        <span class="mdi--heart-outline"></span>
+                        <span class="fontisto--favorite"></span>
+                        <button class="share-btn">
+                        <span class="solar--share-linear"></span>
+                        </button>
+                        </div>
+                  </div>
+                  </div>
+                  <div class="slide swiper-slide">
+                    <p>
+                      "Even though I walk through the darkest valley, I will fear no evil, for you are with me; your rod and your staff, they comfort me." - Psalm 23:4
+                    </p>
+
+                    <i class="bx bxs-quote-alt-left quote-icon"></i>
+
+                    <div class="details">
+                        <button type="submit"><a href="{% url 'findyourverse' %}"> Choose Another Mood </a></button>
+                        <div class="icon-container">
+                        <span class="mdi--heart-outline"></span>
+                        <span class="fontisto--favorite"></span>
+                        <button class="share-btn">
+                        <span class="solar--share-linear"></span>
+                        </button>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+              <div class="swiper-button-next nav-btn"></div>
+              <div class="swiper-button-prev nav-btn"></div>
+              <div class="swiper-pagination"></div>
+            </div>
+          </section>
+    </div>
+  
+
+    <script src="{% static 'javascript/swiper-bundle.min.js' %} "></script>
+    <script src="{% static 'javascript/moods.js' %}"></script>
+{% endblock %}

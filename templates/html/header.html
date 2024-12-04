@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{% block title %}Default Title{% endblock %}</title>
+        <link rel="stylesheet" href="{% static 'css/moodverse.css' %}">
+        <link rel="icon" href="{% static 'images/logo.png' %}" sizes="64x64" type="image/png">
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+            integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+            />
+        {% block additional_css %}
+
+        {% endblock %}
+    </head>
+    <body>
+            <div class="header">
+                <div class="account-icon">
+                    {% if request.user.is_authenticated and profile_picture_url %}
+                        <img src="{{ profile_picture_url }}" alt="Profile Picture" id="current-picture" class="user-icon" onclick="toggleMenu()">
+                    {% endif %}
+                  </div>
+                <span class="title">AGAPE</span>
+                <div class="sub-menu-wrap" id="subMenu">
+                    <div class="sub-menu">
+                        <div class="user-info">
+                            <img src="{{ profile_picture_url }}" alt="Profile Picture">
+                        <h2>{{ fname }}</h2>
+                        </div>
+                        <hr>
+
+                        <a href="{% url 'editProfile' %}" class="sub-menu-link">
+                        <img src="{% static 'images/profile.png' %}" alt="profile">
+                        <p>Edit Profile</p>
+                        <span>></span>
+                        </a>
+
+                        <a href="{% url 'myLikes' %}" class="sub-menu-link">
+                        <img src="{% static 'images/bookmark.png' %}" alt="profile">
+                        <p>Bookmarked</p>
+                        <span>></span>
+                        </a>
+                        <a href="/signout" class="sub-menu-link">
+                        <img src="{% static 'images/logout.png' %}" alt="profile">
+                        <p>Logout</p>
+                        <span>></span>
+                        </a>
+                    </div>
+                </div>
+                <nav class="menu">
+                  <a href="{% url 'landing' %}">HOME</a>
+                  <a href="{% url 'findyourverse' %}">FIND YOUR VERSE</a>
+                  <a href="{% url 'journal' %}">JOURNAL</a>
+                  <a href="{% url 'dailyverse' %}">VERSE OF THE DAY</a>
+                  <a href="{% url 'bibleTrivia' %}">BIBLE TRIVIA</a>
+                  <a href="{% url 'rosaryguide' %}">ROSARY GUIDE</a>
+                </nav>
+            </div>
+            {% block bodycontents %}
+
+            {% endblock %}
+            <script src="{% static 'javascript/header.js' %}"></script>
+    </body>
+</html>

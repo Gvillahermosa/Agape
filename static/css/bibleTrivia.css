@@ -1,0 +1,113 @@
+/* Remove scrollbar */
+body::-webkit-scrollbar {
+    display: none;
+}
+
+body {
+    background-image: url(../images/daily.jpeg);
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+/* Main content container */
+.main-contents {
+    background-color: #991D1D;
+    width: 80%; /* Adjusted for better centering */
+    margin: 100px auto; /* Center horizontally and add vertical spacing */
+    height: 50%; /* Allow the height to adjust dynamically */
+    border-radius: 20px;
+    padding: 30px; /* Add internal padding */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow for better contrast */
+    text-align: center; /* Center align content */
+}
+
+/* Title styling */
+.main-contents h1 {
+    color: white;
+    font-size: 40px;
+    margin-bottom: 20px; /* Add spacing below the heading */
+}
+
+/* Carousel container */
+.carousel {
+    margin: 0 auto; /* Center the carousel */
+    color: white;
+    max-width: 800px; /* Restrict max width */
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    border-radius: 10px;
+
+}
+
+/* Carousel content */
+#carousel-content {
+    width: 55%;
+    margin: 0 auto; /* Center the carousel */
+    font-size: 18px;
+    position: absolute;
+    line-height: 1.5;
+    font-size: 25px;
+}
+
+/* Controls container */
+.controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 250px;
+}
+
+/* Navigation buttons */
+.controls button {
+    background-color: white;
+    color: #800000;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.controls button:hover {
+    background-color: #ccc;
+    transform: scale(1.05); /* Add a subtle zoom effect */
+}
+
+/* Counter styling */
+#counter {
+    font-size: 16px;
+    color: white;
+    font-weight: bold;
+}
+/*
+
+@media (max-width: 768px) {
+    .main-contents {
+        width: 90%;
+        padding: 20px;
+    }
+
+    .carousel {
+        padding: 15px;
+    }
+
+    #carousel-content {
+        font-size: 16px;
+    }
+
+    .controls button {
+        padding: 8px 16px;
+        font-size: 12px;
+    }
+
+    #counter {
+        font-size: 14px;
+    }
+} */

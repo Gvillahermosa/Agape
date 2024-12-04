@@ -1,0 +1,20 @@
+.navigation {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.nav-button {
+    background: none;
+    color: white; /* Icon color */
+    border: none; /* No border */
+    cursor: pointer;
+    font-size: 2em; /* Size of icons */
+    margin: 0 10px;
+    transition: color 0.3s; /* Hover effect */
+}
+
+.nav-button:hover {
+    color: rgba(255, 255, 255, 0.7); /* Change color on hover */
+}

@@ -1,0 +1,97 @@
+body::-webkit-scrollbar{
+    display: none;
+}
+
+body{
+    background-image: url(../images/sunsetbg.jpg);
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+}
+
+h1{
+
+    font-size: 54px;
+    color: white;
+}
+
+.content{
+    background-color: #991D1D;
+    width: 60.6%;
+    margin-left: 300px;
+    margin-top: -20px;
+    height: 35px;
+    border-radius: 20px 20px 0px 0px;
+}
+
+.content p{
+    color: #FFF;
+    text-align: center;
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.lower-content{
+    background-color: #FFF;
+    width: 63%;
+    margin-left: 300px;
+    margin-top: -50px;
+    height: 300px;
+    border-radius: 0px 0px 20px 20px;
+    position: absolute;
+
+}
+
+.lower-content p{
+    font-size: 25px;
+    position: absolute;
+    margin-top: 110px;
+    color: black;
+    font-style: italic;
+    justify-content: center;
+    left: 50%; /* Horizontally centers the content */
+    transform: translate(-50%, -50%); /* Adjusts for the content size */
+    width: 80%; /* Limit the width to prevent text from stretching too far */
+    text-align: center; /* Ensures text inside is centered */
+}
+
+
+.lower-content .reference{
+    margin-top: 250px;
+    margin-left: 38%;
+    font-size: 18px;
+}
+
+.reflection-content{
+    position: absolute;
+    margin-top: 290px;
+    background-color: #FFF;
+    width: 62.6%;
+    margin-left: 300px;
+    height: 200px;
+    border-radius: 20px;
+}
+
+.reflection-content p{
+    color: black;
+    margin-right: 800px;
+    font-weight: bold;
+    font-size: 20px
+}
+
+
+.reflection{
+    margin-top: 25px;
+    position: absolute;
+    color: black;
+    font-size: 20px;
+    justify-content: center;
+    left: 50%; /* Horizontally centers the content */
+    transform: translate(-50%, -50%); /* Adjusts for the content size */
+    width: 90%; /* Limit the width to prevent text from stretching too far */
+    text-align: center; /* Ensures text inside is centered */
+    line-height: 1.5;
+}

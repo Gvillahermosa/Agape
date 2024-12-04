@@ -1,0 +1,118 @@
+{% extends "../html/header.html" %}
+{% load static %}
+
+{% block title %}
+    Mood Bible Verse
+{% endblock %}
+
+{% block additional_css %}
+<link rel="stylesheet" href="{% static 'css/moods.css' %}">
+<link rel="stylesheet" href="{% static 'css/swiper-bundle.min.css' %}" />
+{% endblock %}
+
+{% block bodycontents %}
+    <img src="{% static 'images/image2.jpg' %}" alt="Prayer Image" class="image2">
+    <div class="content">
+        <h1 class="upper-content">Here's a verse for when you're feeling Overwhelmed:</h1>
+        <section class="container">
+            <div class="testimonial mySwiper">
+              <div class="testi-content swiper-wrapper">
+                <div class="slide swiper-slide">
+                  <p>
+                    "When my heart is overwhelmed, lead me to the rock that is higher than I." - Psalm 61:2
+                  </p>
+
+                  <div class="details">
+                        <button type="submit"><a href="{% url 'findyourverse' %}"> Choose Another Mood </a></button>
+                        <div class="icon-container">
+                        <span class="mdi--heart-outline"></span>
+                        <span class="fontisto--favorite"></span>
+                        <button class="share-btn">
+                        <span class="solar--share-linear"></span> <!-- Share icon -->
+                        </button>
+                        </div>
+                  </div>
+                </div>
+                <div class="slide swiper-slide">
+                  <p>
+                    "Come to me, all you who are weary and burdened, and I will give you rest." - Matthew 11:28
+                  </p>
+
+                  <i class="bx bxs-quote-alt-left quote-icon"></i>
+
+                  <div class="details">
+                    <button type="submit"><a href="{% url 'findyourverse' %}"> Choose Another Mood </a></button>
+                    <div class="icon-container">
+                    <span class="mdi--heart-outline"></span>
+                    <span class="fontisto--favorite"></span>
+                    <button class="share-btn">
+                    <span class="solar--share-linear"></span> <!-- Share icon -->
+                    </button>
+                    </div>
+              </div>
+                </div>
+                <div class="slide swiper-slide">
+                  <p>
+                    "The Lord gives strength to His people; the Lord blesses His people with peace." - Psalm 29:11
+                  </p>
+
+                  <i class="bx bxs-quote-alt-left quote-icon"></i>
+
+                  <div class="details">
+                    <button type="submit"><a href="{% url 'findyourverse' %}"> Choose Another Mood </a></button>
+                    <div class="icon-container">
+                    <span class="mdi--heart-outline"></span>
+                    <span class="fontisto--favorite"></span>
+                    <button class="share-btn">
+                    <span class="solar--share-linear"></span> <!-- Share icon -->
+                    </button>
+                    </div>
+              </div>
+                </div>
+                <div class="slide swiper-slide">
+                    <p>
+                      "Do not fear, for I am with you; do not be dismayed, for I am your God. I will strengthen you and help you; I will uphold you with my righteous right hand." - Isaiah 41:10
+                    </p>
+
+                    <i class="bx bxs-quote-alt-left quote-icon"></i>
+
+                    <div class="details">
+                        <button type="submit"><a href="{% url 'findyourverse' %}"> Choose Another Mood </a></button>
+                        <div class="icon-container">
+                        <span class="mdi--heart-outline"></span>
+                        <span class="fontisto--favorite"></span>
+                        <button class="share-btn">
+                        <span class="solar--share-linear"></span> <!-- Share icon -->
+                        </button>
+                        </div>
+                  </div>
+                  </div>
+                  <div class="slide swiper-slide">
+                    <p>
+                      "Cast your cares on the Lord and He will sustain you; He will never let the righteous be shaken." - Psalm 55:22
+                    </p>
+
+                    <i class="bx bxs-quote-alt-left quote-icon"></i>
+
+                    <div class="details">
+                        <button type="submit"><a href="{% url 'findyourverse' %}"> Choose Another Mood </a></button>
+                        <div class="icon-container">
+                        <span class="mdi--heart-outline"></span>
+                        <span class="fontisto--favorite"></span>
+                        <button class="share-btn">
+                        <span class="solar--share-linear"></span> <!-- Share icon -->
+                        </button>
+                        </div>
+                  </div>
+                  </div>
+              </div>
+              <div class="swiper-button-next nav-btn"></div>
+              <div class="swiper-button-prev nav-btn"></div>
+              <div class="swiper-pagination"></div>
+            </div>
+          </section>
+    </div>
+
+    <script src="{% static 'javascript/swiper-bundle.min.js' %} "></script>
+    <script src="{% static 'javascript/moods.js' %}"></script>
+{% endblock %}

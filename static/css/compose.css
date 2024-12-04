@@ -1,0 +1,190 @@
+body {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+}
+
+body::-webkit-scrollbar{
+    display: none;
+}
+
+.content {
+    display: flex; /* Use flexbox to arrange sidebar and form side by side */
+    padding: 0; /* Remove padding */
+}
+
+
+.sidebar {
+    position: absolute;
+    background-color: #A52B23;
+    color: white;
+    width: 310px;
+    height: 950px;
+    top: -100px;
+    left: 0;
+    padding: 20px;
+    box-sizing: border-box;
+    font-size: 20px;
+}
+
+.content h2{
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin-left: -670px;
+    margin-top: -65px;
+    color: black;
+    margin-bottom: 80px;
+}
+
+
+.sidebar h3 {
+    margin-right: 90px;
+    margin-top: -10px;
+}
+
+.sidebar a {
+    color: white; /* Link color */
+    text-decoration: none; /* Remove underline */
+    margin-bottom: 10px; /* Space between links */
+    margin-left: 10px; /* Indentation for links */
+    display: block; /* Make links block elements for full width */
+    padding: 5px; /* Add padding to the links for consistency */
+    transition: background-color 0.3s, border 0.3s; /* Smooth transition for background and border */
+}
+
+#compose{
+    margin-left: -15px;
+}
+
+.sidebar a:hover {
+    background-color: rgba(255, 255, 255, 0.2); /* Light shade on hover */
+    border-left: 4px solid white; /* Add a border on the left */
+    width: 120%;
+}
+.compose-section {
+    margin-top: -20px; /* Maintain space below header */
+    background-color: #D9D9D9;
+    border: 2px solid #bdc3c7; /* Border around the form section */
+    padding: 40px; /* Increase padding for a larger feel */
+    border-radius: 10px; /* Rounded corners */
+    margin-left: 355px; /* Space for the sidebar */
+    margin-right: 55px; /* Space on the right */
+    position: relative; /* Required for z-index to take effect */
+    height: 650px;
+    overflow: hidden;
+    font-size: 25px; /* Set base font size for the entire section */
+    margin-bottom: 40px;
+    width: 70%;
+}
+
+form {
+    height: 100%; /* Ensure form takes full height of the compose section */
+    display: flex;
+    flex-direction: column;
+}
+
+
+.title-time {
+    display: flex; /* Use flexbox to arrange title and time side by side */
+    gap: 30px; /* Space between the two input groups */
+    margin-right: 10px;
+}
+
+.input-group {
+    flex: 1; /* Allow input groups to grow equally */
+}
+
+.title-group {
+    flex: 2; /* Wider for the title input */
+}
+
+.time-group {
+    flex: 1; /* Regular width for the time input */
+}
+
+.input-group label {
+    display: block; /* Make the label a block element to stack above the input */
+    margin-bottom: 5px; /* Space below the label */
+}
+
+form input {
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+    width: 100%; /* Full width for input fields */
+    padding: 10px; /* Padding for input fields */
+    border: 2px solid #bdc3c7; /* Border for input fields */
+    border-radius: 5px; /* Rounded corners for input fields */
+    font-size: 20px; /* Set font size for inputs and textarea */
+}
+
+form textarea {
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+    width: 100%; /* Full width for input fields */
+    padding: 10px; /* Padding for input fields */
+    border: 2px solid #bdc3c7; /* Border for input fields */
+    border-radius: 5px; /* Rounded corners for input fields */
+    font-size: 20px; /* Set font size for inputs and textarea */
+    margin-bottom: 15px; /* Space below the textarea */
+    height: 1500px; /* Increased height for the note textarea */
+}
+.buttons {
+
+    display: flex;
+    justify-content: right; /* Center the buttons horizontally */
+    gap: 45px; /* Space between buttons */
+
+}
+
+.buttons button {
+    padding: 10px 20px; /* Consistent padding */
+    border: none; /* No border */
+    border-radius: 10px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    font-size: 20px; /* Font size for buttons */
+    transition: background-color 0.3s; /* Smooth transition for background color */
+
+}
+
+.buttons button[type='submit'] {
+    background-color: #27ae60; /* Green background for submit button */
+    color: white; /* White text for submit button */
+    width: 164px;
+}
+
+.buttons button[type='reset'] {
+    background-color: #e74c3c; /* Red background for reset button */
+    color: white; /* White text for reset button */
+    width: 164px;
+}
+
+.buttons button:hover {
+    opacity: 0.9; /* Slightly transparent on hover */
+}
+
+#note-content{
+    resize: none;
+    border-radius: 10px;
+
+}
+
+label[for="note-title"],[for="note-time"] {
+    padding: 10px; /* 10px top and bottom, 15px left and right */
+    font-weight: bold;
+    color: black;
+    margin-right: 550px;
+}
+
+label[for="note-content"] {
+    padding: 10px; /* 10px top and bottom, 15px left and right */
+    font-weight: bold;
+    color: black;
+    margin-right: 1000px;
+}
+
+
+#note-time{
+    margin-right: 270px;
+    width: 65%;
+}

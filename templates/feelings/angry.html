@@ -1,0 +1,66 @@
+{% extends "../html/header.html" %}
+{% load static %}
+
+{% block title %}
+    Angry Mood Bible Verses
+{% endblock %}
+
+{% block additional_css %}
+<link rel="stylesheet" href="{% static 'css/moods.css' %}">
+<link rel="stylesheet" href="{% static 'css/swiper-bundle.min.css' %}" />
+{% endblock %}
+
+{% block bodycontents %}
+    <img src="{% static 'images/image2.jpg' %}" alt="Prayer Image" class="image2">
+    <div class="content">
+        <h1 class="upper-content">Here's a verse for when you're feeling Angry</h1>
+        <section class="container">
+            <div class="testimonial mySwiper">
+                <div class="testi-content swiper-wrapper">
+                    {% for verse in angry_verses %}
+                    <div class="slide swiper-slide">
+                        <p>{{ verse.verse_text }}</p>
+
+                        <div class="details">
+
+
+                            <button type="submit"><a href="{% url 'findyourverse' %}">Choose Another Mood</a></button>
+
+                            <div class="icon-container">
+                                 <!-- Like button form -->
+                            <form method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" name="verse_id" value="{{ verse.id }}">
+
+                                <!-- Check if the verse is liked by the user -->
+                                {% if verse.id in liked_verses %}
+                                <button type="submit" class="unlike-btn">
+                                    <img src="{% static 'images/red_heart.png' %}" alt="Unlike">
+                                </button>
+                                {% else %}
+                                    <button type="submit" class="like-btn"><img src="{% static 'images/heart2.png' %}" alt=""></button>
+                                {% endif %}
+                            </form>
+
+                                <button class="bookmark-btn">
+                                <span class="fontisto--favorite"></span>
+                                </button>
+                                <button class="share-btn">
+                                <span class="solar--share-linear"></span>
+                                </button>
+                            </div>
+                            <p id="like_count">{{ verse.like_count }}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="swiper-button-next nav-btn"></div>
+                <div class="swiper-button-prev nav-btn"></div>
+                <div class="swiper-pagination"></div>
+            </div>
+        </section>
+    </div>
+
+    <script src="{% static 'javascript/swiper-bundle.min.js' %}"></script>
+    <script src="{% static 'javascript/moods.js' %}"></script>
+{% endblock %}
