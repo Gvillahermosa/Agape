@@ -1,0 +1,285 @@
+/* Remove scrollbar */
+body::-webkit-scrollbar {
+    display: none;
+}
+
+body {
+    background-image: url(../images/rosarybg.png);
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+  /* Main container styles */
+  .main-contents {
+    display: flex; /* Use flexbox for easier height management */
+    flex-direction: column; /* Align items vertically */
+    height: 100%; /* Main container takes full viewport height */
+    background-color: #bd1f1f; /* Red background */
+    color: white;
+    padding: 20px;
+    border-radius: 15px;
+    max-width: 900px;
+    margin: 30px auto;
+    height: 550px;
+  }
+
+
+
+h3{
+    color: black;
+    text-align: center;
+    margin-top: -10px;
+  }
+  .prayer-list-container {
+    display: flex;
+    background-color: #a71c1c; /* Lighter red */
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .sidebar {
+    width: 200px;
+    background-color: #8f1717; /* Even lighter red */
+    padding: 10px 0;
+    color: white;
+    height: 450px;
+  }
+
+  .sidebar a{
+    text-decoration: none;
+    color: white;
+}
+  .side-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .side-item span{
+    margin-left: 5px;
+  }
+  .side-item a {
+    color: white;
+    text-decoration: none;
+  }
+
+  .side-item.active {
+    background-color: #bd1f1f;
+  }
+
+  .side-item:hover {
+    background-color: #b02121;
+  }
+
+  .prayer-list-content {
+    flex: 1; /* Take up remaining space */
+    padding: 20px;
+    background-color: #fff; /* White */
+    border-radius: 0px 8px 8px 0px;
+    overflow-y: auto; /* Enable vertical scrolling */
+    max-height: 500px; /* Allow scrolling when content exceeds container */
+  }
+
+
+/* Custom Scrollbar Styles */
+.prayer-list-content::-webkit-scrollbar {
+    width: 8px; /* Adjust scrollbar width */
+  }
+
+  .prayer-list-content::-webkit-scrollbar-track {
+    background: #f5f5f5; /* Light gray track background */
+    border-radius: 5px;
+  }
+
+  .prayer-list-content::-webkit-scrollbar-thumb {
+    background: #D9D9D9; /* Red scrollbar thumb */
+    border-radius: 5px; /* Rounded corners */
+  }
+
+  .prayer-list-content::-webkit-scrollbar-thumb:hover {
+    background: #8f1717; /* Darker red when hovered */
+  }
+
+  /* Horizontal scrollbar customization (not necessary here but included for completeness) */
+  .prayer-list-content::-webkit-scrollbar-horizontal {
+    height: 6px; /* Thinner horizontal scrollbar */
+  }
+
+  .journal-list {
+    margin-top: 10px;
+    background-color: #991D1D; /* Container background */
+    padding: 20px;
+    border-radius: 10px; /* Rounded corners */
+    margin-left: 5px; /* Margin to align with the sidebar */
+    color: white; /* Text color for visibility */
+    width: 610px;
+    border-bottom: 1px solid #ccc; /* Bottom border for entries */
+}
+
+.journal-entry-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr 50px; /* Columns for title, date, and favorite */
+    align-items: center; /* Vertically center content */
+    margin-bottom: 10px; /* Space below header */
+    margin-right: 40px;
+    font-size: 25px;
+}
+
+.journal-entries {
+    display: flex;
+    flex-direction: column; /* Stack entries vertically */
+}
+
+.journal-entry {
+    display: grid;
+    grid-template-columns: 30px 1fr 1fr 50px; /* Added a column for the checkbox */
+    align-items: center; /* Vertically center content */
+    padding: 10px 0; /* Padding for each entry */
+    border-bottom: 1px solid #ccc; /* Bottom border for entries */
+}
+
+  .journalTable th{
+    font-size: 20px;
+  }
+
+  .journalTable td{
+    padding: 8px;
+    font-size: 18px;
+  }
+
+  .journalTable td a{
+    color: white;
+    text-decoration: none;
+  }
+  .delete-button {
+    background-color: #007bff; /* Bootstrap primary color for edit */
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    margin: 2px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.edit-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+.delete-button {
+    background-color: #dc3545; /* Bootstrap danger color for delete */
+}
+
+.delete-button:hover {
+    background-color: #c82333; /* Darker red on hover */
+}
+
+/* Modal styles */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1000; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    background-color: rgba(0, 0, 0, 0.5); /* Black w/ opacity */
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 300px; /* Could be more or less depending on the screen size */
+    border-radius: 5px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Confirm and cancel buttons in the modal */
+.confirm-delete,
+.cancel-delete {
+    background-color: #007bff; /* Bootstrap primary color for confirm */
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+.confirm-delete:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+.cancel-delete {
+    background-color: #dc3545; /* Bootstrap danger for cancel */
+}
+
+.cancel-delete:hover {
+    background-color: #c82333; /* Darker red on hover */
+}
+
+/* Styles for the letter-like modal */
+.letter-style {
+    background-color: #fff; /* White background */
+    padding: 20px;
+    border-radius: 8px;
+    width: 400px; /* Suitable width for letter style */
+    margin: 10% auto; /* Center on the page */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+    max-height: 70vh; /* Maximum height of the modal */
+    overflow-y: auto; /* Enable vertical scroll if content exceeds max height */
+}
+
+/* Scrollbar styling (optional) */
+.letter-style::-webkit-scrollbar {
+    width: 8px; /* Width of the scrollbar */
+}
+
+.letter-style::-webkit-scrollbar-thumb {
+    background: #ccc; /* Color of the scrollbar */
+    border-radius: 10px; /* Rounded corners for scrollbar */
+}
+
+.letter-style::-webkit-scrollbar-thumb:hover {
+    background: #aaa; /* Darker shade on hover */
+}
+
+/* Adjust modal close button */
+.close {
+    cursor: pointer;
+    font-size: 20px;
+    line-height: 20px;
+}
+
+/* Add some padding to paragraph text */
+.prayer-content {
+    font-family: 'Georgia', serif; /* Elegant font for letter style */
+    font-size: 16px;
+    line-height: 1.6; /* Line height for easy reading */
+}

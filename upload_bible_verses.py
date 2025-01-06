@@ -26,5 +26,5 @@ def upload_bible_verses(file_path):
 
 if __name__ == '__main__':
     # Use a raw string or forward slashes to specify your file path
-    file_path = r'C:\Users\admin\Desktop\Agape\DailyBibleverses.xlsx'
+    file_path = r'C:\Users\Administrator\Desktop\latest lovey agape\agape-main\DailyBibleverses.xlsx'
     upload_bible_verses(file_path)

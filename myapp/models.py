@@ -41,6 +41,7 @@ class BibleVerse(models.Model):
 
 
 class Like(models.Model):
+    id = models.AutoField(primary_key=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)  # This links each like to a user
     verse = models.ForeignKey(BibleVerse, on_delete=models.CASCADE)  # This links each like to a verse
 
@@ -48,6 +49,7 @@ class Like(models.Model):
         return f"{self.user.username} liked: {self.verse.verse_text[:100]}..."  # First 50 characters of the verse_text
 
 class JournalEntry(models.Model):
+    id = models.AutoField(primary_key=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     created_date = models.DateField()
@@ -58,10 +60,38 @@ class JournalEntry(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    profile_picture = models.ImageField(upload_to='profile_pictures/', blank=True, null=True,default='profile_pictures/default.jpg')
+    profile_picture = models.ImageField(upload_to='profile_pictures/', blank=True, null=True,default='../profile_pictures/account.png')
 
     def __str__(self):
         return self.user.username
+
+class Bookmark(models.Model):
+    id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    verse = models.ForeignKey(BibleVerse, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'verse')  # Ensures a user can only bookmark a verse once
+
+class Prayer(models.Model):
+    id = models.AutoField(primary_key=True)
+    title = models.CharField(max_length=255)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='prayers')  # Add ForeignKey to User
+
+    def __str__(self):
+        return self.title
+
+class PrayerTime(models.Model):
+    id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='prayer_times')
+    prayer_time = models.TimeField()
+
+    def __str__(self):
+        return f"{self.user.username} - {self.prayer_time}"
+
 
 
 ##################

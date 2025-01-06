@@ -17,104 +17,50 @@
         <section class="container">
             <div class="testimonial mySwiper">
               <div class="testi-content swiper-wrapper">
-                <!-- Slide 1 -->
-                <div class="slide swiper-slide">
-                  <p>
-                    "This is the day the Lord has made; let us rejoice and be glad in it." - Psalm 118:24
-                  </p>
+                    {% for verse in happy_verses %}
+                    <div class="slide swiper-slide">
+                        <p>{{ verse.verse_text }} - {{ verse.reference}}</p>
 
-                  <div class="details">
-                    <button type="submit"><a href="{% url 'findyourverse' %}">Choose Another Mood</a></button>
-                    <div class="icon-container">
-                      <span class="mdi--heart-outline"></span>
-                      <span class="fontisto--favorite"></span>
-                      <button class="share-btn">
-                        <span class="solar--share-linear"></span> <!-- Share icon -->
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                <!-- Slide 2 -->
-                <div class="slide swiper-slide">
-                  <p>
-                    "Rejoice in the Lord always. I will say it again: Rejoice!" - Philippians 4:4
-                  </p>
+                        <div class="details">
 
-                  <i class="bx bxs-quote-alt-left quote-icon"></i>
 
-                  <div class="details">
-                    <button type="submit"><a href="{% url 'findyourverse' %}">Choose Another Mood</a></button>
-                    <div class="icon-container">
-                      <span class="mdi--heart-outline"></span>
-                      <span class="fontisto--favorite"></span>
-                      <button class="share-btn">
-                        <span class="solar--share-linear"></span> <!-- Share icon -->
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                <!-- Slide 3 -->
-                <div class="slide swiper-slide">
-                  <p>
-                    "A cheerful heart is good medicine, but a crushed spirit dries up the bones." - Proverbs 17:22
-                  </p>
+                            <button type="submit" class="choosebtn"><a href="{% url 'findyourverse' %}">Choose Another Mood</a></button>
 
-                  <i class="bx bxs-quote-alt-left quote-icon"></i>
+                            <div class="icon-container">
+                                 <!-- Like button form -->
+                                 <button
+                                class="like-btn"
+                                data-verse-id="{{ verse.id }}"
+                                data-liked="{% if verse.id in liked_verses %}true{% else %}false{% endif %}">
+                                {% if verse.id in liked_verses %}
+                                <img src="{% static 'images/red_heart.png' %}" alt="Unlike">
+                                {% else %}
+                                <img src="{% static 'images/heart2.png' %}" alt="Like">
+                                {% endif %}
+                                </button>
 
-                  <div class="details">
-                    <button type="submit"><a href="{% url 'findyourverse' %}">Choose Another Mood</a></button>
-                    <div class="icon-container">
-                      <span class="mdi--heart-outline"></span>
-                      <span class="fontisto--favorite"></span>
-                      <button class="share-btn">
-                        <span class="solar--share-linear"></span> <!-- Share icon -->
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                <!-- Slide 4 -->
-                <div class="slide swiper-slide">
-                    <p>
-                        "May the God of hope fill you with all joy and peace as you trust in him." - Romans 15:13
-                    </p>
+                                <button
+                                class="bookmark-btn"
+                                    data-verse-id="{{ verse.id }}"
+                                    data-bookmarked="{% if verse.id in bookmarked_verses %}true{% else %}false{% endif %}">
+                                    {% if verse.id in bookmarked_verses %}
+                                        <img src="{% static 'images/bookmark-yellow.png' %}" alt="Unbookmark">
+                                    {% else %}
+                                        <img src="{% static 'images/bookmark-white.png' %}" alt="Bookmark">
+                                    {% endif %}
+                                </button>
+                                    <button class="share-btn">
+                                        <span class="solar--share-linear"></span>
+                                </button>
 
-                    <i class="bx bxs-quote-alt-left quote-icon"></i>
-
-                    <div class="details">
-                        <button type="submit"><a href="{% url 'findyourverse' %}">Choose Another Mood</a></button>
-                        <div class="icon-container">
-                            <span class="mdi--heart-outline"></span>
-                            <span class="fontisto--favorite"></span>
-                            <button class="share-btn">
-                              <span class="solar--share-linear"></span> <!-- Share icon -->
-                            </button>
+                            </div>
+                            <p class="like-count" id="like_count_{{ verse.id }}">{{ verse.like_count }}</p>
                         </div>
                     </div>
+                    {% endfor %}
                 </div>
-                <!-- Slide 5 -->
-                <div class="slide swiper-slide">
-                    <p>
-                        "You make known to me the path of life; in your presence there is fullness of joy; at your right hand are pleasures forevermore." - Psalm 16:11
-                    </p>
-
-                    <i class="bx bxs-quote-alt-left quote-icon"></i>
-
-                    <div class="details">
-                        <button type="submit"><a href="{% url 'findyourverse' %}">Choose Another Mood</a></button>
-                        <div class="icon-container">
-                            <span class="mdi--heart-outline"></span>
-                            <span class="fontisto--favorite"></span>
-                            <button class="share-btn">
-                                <span class="solar--share-linear"></span> <!-- Share icon -->
-                            </button>
-                        </div>
-                    </div>
-                </div>
-              </div>
-              <!-- Swiper Navigation and Pagination -->
-              <div class="swiper-button-next nav-btn"></div>
-              <div class="swiper-button-prev nav-btn"></div>
-              <div class="swiper-pagination"></div>
+                <div class="swiper-button-next nav-btn"></div>
+                <div class="swiper-button-prev nav-btn"></div>
             </div>
           </section>
     </div>
@@ -122,4 +68,71 @@
     <!-- Include Swiper JS and Custom JS -->
     <script src="{% static 'javascript/swiper-bundle.min.js' %}"></script>
     <script src="{% static 'javascript/moods.js' %}"></script>
+    <script>
+        document.querySelectorAll('.like-btn').forEach(button => {
+            button.addEventListener('click', function () {
+                const verseId = this.getAttribute('data-verse-id');
+                const isLiked = this.getAttribute('data-liked') === 'true';
+
+                fetch("{% url 'happyverses' %}", {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ verse_id: verseId, action: isLiked ? 'unlike' : 'like' })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Update button state and like count
+                        this.setAttribute('data-liked', !isLiked);
+                        this.querySelector('img').src = isLiked ?
+                            "{% static 'images/heart2.png' %}" :
+                            "{% static 'images/red_heart.png' %}";
+
+                        const likeCount = document.getElementById(`like_count_${verseId}`);
+                        likeCount.textContent = data.like_count;
+                    } else {
+                        console.error('Error:', data.error);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            });
+        });
+
+        document.querySelectorAll('.bookmark-btn').forEach(button => {
+        button.addEventListener('click', function () {
+            const verseId = this.getAttribute('data-verse-id');
+            const isBookmarked = this.getAttribute('data-bookmarked') === 'true';
+
+            fetch("{% url 'happyverses' %}", {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ verse_id: verseId, action: isBookmarked ? 'unbookmark' : 'bookmark' })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Update button state and image
+                    this.setAttribute('data-bookmarked', !isBookmarked);
+                    const icon = this.querySelector('img');
+                    icon.src = isBookmarked ?
+                        "{% static 'images/bookmark-white.png' %}" :
+                        "{% static 'images/bookmark-yellow.png' %}";
+
+                    // Optionally update bookmark count
+                    const bookmarkCount = document.getElementById(`bookmark_count_${verseId}`);
+                    bookmarkCount.textContent = data.bookmark_count;
+                } else {
+                    console.error('Error:', data.error);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    });
+    </script>
 {% endblock %}

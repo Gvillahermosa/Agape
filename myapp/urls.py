@@ -28,8 +28,12 @@ urlpatterns = [
     path('overwhelmedverse', views.overwhelmedverse, name="overwhelmedverse"),
     path('confusedverse', views.confusedverse, name="confusedverse"),
     path('rosaryguide', views.rosaryguide, name="rosaryguide"),
-    # path('rosary', views.rosary, name="rosary"),
     path('editProfile/', views.edit_profile, name='editProfile'),
-    path('myLikes', views.myLikes, name='myLikes'),
-   
+    path('customprayers', views.customprayers, name='customprayers'),
+    path('viewcustomprayers', views.viewcustomprayers, name='viewcustomprayers'),
+    path('delete_prayer/<int:id>/', views.delete_prayer, name='delete_prayer'),
+    path('setTime', views.setTime, name='setTime'),
+    path('myLikes/', views.myLikes, name='myLikes'),
+
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

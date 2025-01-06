@@ -16,103 +16,122 @@
         <h1 class="upper-content">Here's a verse for when you're feeling Lonely:</h1>
         <section class="container">
             <div class="testimonial mySwiper">
-              <div class="testi-content swiper-wrapper">
-                <div class="slide swiper-slide">
-                  <p>
-                    "The Lord Himself goes before you and will be with you; He will never leave you nor forsake you. Do not be afraid; do not be discouraged." - Deuteronomy 31:8
-                  </p>
+                <div class="testi-content swiper-wrapper">
+                    {% for verse in lonely_verses %}
+                    <div class="slide swiper-slide">
+                        <p>{{ verse.verse_text }} - {{ verse.reference}}</p>
 
-                  <div class="details">
-                        <button type="submit"><a href="{% url 'findyourverse' %}"> Choose Another Mood </a></button>
-                        <div class="icon-container">
-                        <span class="mdi--heart-outline"></span>
-                        <span class="fontisto--favorite"></span>
-                        <button class="share-btn">
-                        <span class="solar--share-linear"></span> <!-- Share icon -->
-                        </button>
+                        <div class="details">
+
+                            <button type="submit" class="choosebtn"><a href="{% url 'findyourverse' %}">Choose Another Mood</a></button>
+
+                            <div class="icon-container">
+                                 <!-- Like button form -->
+                                 <button
+                                class="like-btn"
+                                data-verse-id="{{ verse.id }}"
+                                data-liked="{% if verse.id in liked_verses %}true{% else %}false{% endif %}">
+                                {% if verse.id in liked_verses %}
+                                <img src="{% static 'images/red_heart.png' %}" alt="Unlike">
+                                {% else %}
+                                <img src="{% static 'images/heart2.png' %}" alt="Like">
+                                {% endif %}
+                                </button>
+
+                                <button
+                                class="bookmark-btn"
+                                    data-verse-id="{{ verse.id }}"
+                                    data-bookmarked="{% if verse.id in bookmarked_verses %}true{% else %}false{% endif %}">
+                                    {% if verse.id in bookmarked_verses %}
+                                        <img src="{% static 'images/bookmark-yellow.png' %}" alt="Unbookmark">
+                                    {% else %}
+                                        <img src="{% static 'images/bookmark-white.png' %}" alt="Bookmark">
+                                    {% endif %}
+                                </button>
+                                    <button class="share-btn">
+                                        <span class="solar--share-linear"></span>
+                                </button>
+
+                            </div>
+                            <p class="like-count" id="like_count_{{ verse.id }}">{{ verse.like_count }}</p>
                         </div>
-                  </div>
-                </div>
-                <div class="slide swiper-slide">
-                  <p>
-                    "Even though I walk through the darkest valley, I will fear no evil, for you are with me; your rod and your staff, they comfort me." - Psalm 23:4
-                  </p>
-
-                  <i class="bx bxs-quote-alt-left quote-icon"></i>
-
-                  <div class="details">
-                    <button type="submit"><a href="{% url 'findyourverse' %}"> Choose Another Mood </a></button>
-                    <div class="icon-container">
-                    <span class="mdi--heart-outline"></span>
-                    <span class="fontisto--favorite"></span>
-                    <button class="share-btn">
-                    <span class="solar--share-linear"></span> <!-- Share icon -->
-                    </button>
                     </div>
-              </div>
+                    {% endfor %}
                 </div>
-                <div class="slide swiper-slide">
-                  <p>
-                    "The Lord is close to the brokenhearted and saves those who are crushed in spirit." - Psalm 34:18
-                  </p>
-
-                  <i class="bx bxs-quote-alt-left quote-icon"></i>
-
-                  <div class="details">
-                    <button type="submit"><a href="{% url 'findyourverse' %}"> Choose Another Mood </a></button>
-                    <div class="icon-container">
-                    <span class="mdi--heart-outline"></span>
-                    <span class="fontisto--favorite"></span>
-                    <button class="share-btn">
-                    <span class="solar--share-linear"></span> <!-- Share icon -->
-                    </button>
-                    </div>
-              </div>
-                </div>
-                <div class="slide swiper-slide">
-                    <p>
-                      "God sets the lonely in families, He leads out the prisoners with singing; but the rebellious live in a sun-scorched land." - Psalm 68:6
-                    </p>
-
-                    <i class="bx bxs-quote-alt-left quote-icon"></i>
-
-                    <div class="details">
-                        <button type="submit"><a href="{% url 'findyourverse' %}"> Choose Another Mood </a></button>
-                        <div class="icon-container">
-                        <span class="mdi--heart-outline"></span>
-                        <span class="fontisto--favorite"></span>
-                        <button class="share-btn">
-                        <span class="solar--share-linear"></span> <!-- Share icon -->
-                        </button>
-                        </div>
-                  </div>
-                  </div>
-                  <div class="slide swiper-slide">
-                    <p>
-                      "And surely I am with you always, to the very end of the age." - Matthew 28:20
-                    </p>
-
-                    <i class="bx bxs-quote-alt-left quote-icon"></i>
-
-                    <div class="details">
-                        <button type="submit"><a href="{% url 'findyourverse' %}"> Choose Another Mood </a></button>
-                        <div class="icon-container">
-                        <span class="mdi--heart-outline"></span>
-                        <span class="fontisto--favorite"></span>
-                        <button class="share-btn">
-                        <span class="solar--share-linear"></span> <!-- Share icon -->
-                        </button>
-                        </div>
-                  </div>
-                  </div>
-              </div>
               <div class="swiper-button-next nav-btn"></div>
               <div class="swiper-button-prev nav-btn"></div>
-              <div class="swiper-pagination"></div>
+
             </div>
           </section>
     </div>
 
     <script src="{% static 'javascript/swiper-bundle.min.js' %} "></script>
     <script src="{% static 'javascript/moods.js' %}"></script>
+    <script>
+        document.querySelectorAll('.like-btn').forEach(button => {
+            button.addEventListener('click', function () {
+                const verseId = this.getAttribute('data-verse-id');
+                const isLiked = this.getAttribute('data-liked') === 'true';
+
+                fetch("{% url 'lonelyverse' %}", {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ verse_id: verseId, action: isLiked ? 'unlike' : 'like' })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Update button state and like count
+                        this.setAttribute('data-liked', !isLiked);
+                        this.querySelector('img').src = isLiked ?
+                            "{% static 'images/heart2.png' %}" :
+                            "{% static 'images/red_heart.png' %}";
+
+                        const likeCount = document.getElementById(`like_count_${verseId}`);
+                        likeCount.textContent = data.like_count;
+                    } else {
+                        console.error('Error:', data.error);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            });
+        });
+
+        document.querySelectorAll('.bookmark-btn').forEach(button => {
+        button.addEventListener('click', function () {
+            const verseId = this.getAttribute('data-verse-id');
+            const isBookmarked = this.getAttribute('data-bookmarked') === 'true';
+
+            fetch("{% url 'lonelyverse' %}", {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ verse_id: verseId, action: isBookmarked ? 'unbookmark' : 'bookmark' })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Update button state and image
+                    this.setAttribute('data-bookmarked', !isBookmarked);
+                    const icon = this.querySelector('img');
+                    icon.src = isBookmarked ?
+                        "{% static 'images/bookmark-white.png' %}" :
+                        "{% static 'images/bookmark-yellow.png' %}";
+
+                    // Optionally update bookmark count
+                    const bookmarkCount = document.getElementById(`bookmark_count_${verseId}`);
+                    bookmarkCount.textContent = data.bookmark_count;
+                } else {
+                    console.error('Error:', data.error);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    });
+    </script>
 {% endblock %}

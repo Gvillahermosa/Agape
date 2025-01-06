@@ -10,24 +10,56 @@
 {% endblock %}
 
 {% block bodycontents %}
+<h1>Verse of the Day</h1>
 
-    <h1>Verse of the Day</h1>
+<div class="content">
+    <p>{% now "F j, Y" %}</p>
+</div>
 
-    <div class="content">
-        <p>{% now "F j, Y" %}</p>
-    </div>
-    <div class="lower-content">
-        <div class="verse">
+<div class="lower-content">
+    <div class="verse">
         {% if verse %}
-            <p>"{{ verse.verse_text }}</p>
-            <p class="reference"><strong>-{{ verse.reference }}</strong></p>
+            <p>"{{ verse.verse_text }}"</p>
+            <p class="reference"><strong>- {{ verse.reference }}</strong></p>
         {% else %}
             <p>No verse available for today.</p>
         {% endif %}
-        </div>
     </div>
-    <div class="reflection-content">
-        <p>Reflection</p>
-        <span class="reflection">{{ verse.reflection }}</span>
-    </div>
+</div>
+
+<div class="reflection-content">
+    <p>Reflection</p>
+    <span class="reflection">{{ verse.reflection }}</span>
+</div>
+
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Request notification permission
+        if (Notification.permission !== "granted") {
+            Notification.requestPermission();
+        }
+
+        // Function to create a notification for the verse of the day
+        function sendDailyVerseNotification() {
+            const verseText = "{{ verse.verse_text|escapejs }}"; // Get the verse text
+            const reference = "{{ verse.reference|escapejs }}"; // Get the verse reference
+            const message = `Verse of the Day: "${verseText}" - ${reference}`;
+
+            if (Notification.permission === "granted") {
+                new Notification("Daily Verse", {
+                    body: message,
+                    icon: "{% static 'path_to_your_icon/icon.png' %}", // Optional: URL to an icon
+                });
+            }
+        }
+
+        // Set the notification to trigger once the page is fully loaded
+        if ("{{ verse }}" != "No verse Available") {
+            sendDailyVerseNotification();
+        }
+    });
+</script>
+
 {% endblock %}

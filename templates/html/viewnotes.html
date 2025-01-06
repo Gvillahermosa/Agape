@@ -44,7 +44,7 @@
   </div>
 
   <div class="entries-info">
-      <p>{{ total_entries }}  Entries | 0 Favorite</p>
+      <p>{{ total_entries }}  Entries</p>
   </div>
 
     <div class="journal-list">
@@ -54,18 +54,14 @@
                 <tr>
                     <th>Journal</th>
                     <th>Date Created</th>
-                    <th>Favorite</th>
                     <th>Action</th>
                 </tr>
             </thead>
             <tbody>
                 {% for entry in journal_entries %}
                 <tr>
-                    <td>{{ entry.title }}</td>
+                    <td><a href="#" style="text-decoration: none;color: white;" class="journal-title" data-content="{{ entry.content|escapejs }}" data-toggle="modal" data-target="#journalModal">{{ entry.title }}</a></td>
                     <td>{{ entry.created_date }}</td>
-                    <td>
-                        <span class="emojione-monotone--star"></span>
-                    </td>
                     <td>
                         <form action="{% url 'delete_journal' entry.id %}" method="post" style="display:inline;">
                             {% csrf_token %}
@@ -75,11 +71,65 @@
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="4">No entries found.</td>
+                    <td colspan="3">No entries found.</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
+    </div>
+
+<!-- Journal Content Modal -->
+<div id="journalModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <span class="close">&times;</span>
+            <h5 style="color: white; font-size: 9px;">Journal Entry</h5>
+        </div>
+        <div class="modal-body" style="text-align: left;">
+            <strong>Title:</strong> <!-- Label for title -->
+            <h3 id="journalTitle" style="display: inline; margin: 0;"></h3> <!-- Placeholder for Journal Title -->
+            <p id="journal-text" style="margin-top: 10px;"></p> <!-- Placeholder for Journal Content -->
+        </div>
+    </div>
+</div>
+<script>
+    // JavaScript for handling modal content
+    const modal = document.getElementById("journalModal");
+    const span = document.getElementsByClassName("close")[0];
+
+    document.querySelectorAll('.journal-title').forEach(item => {
+        item.addEventListener('click', function(event) {
+            event.preventDefault();
+            const title = this.innerText; // Capture the title
+            const content = this.getAttribute('data-content'); // Get content
+
+            // Format content
+            const formattedContent = content
+                .replace(/\\u000D\\u000A/g, "<br>")
+                .replace(/\\n/g, "<br>")
+                .replace(/\\r/g, "");
+
+            // Set title and content in the modal
+            document.getElementById("journalTitle").innerText = title; // Set modal title
+            document.getElementById("journal-text").innerHTML = formattedContent; // Set content
+
+            // Show the modal
+            modal.style.display = "block";
+        });
+    });
+
+    // Close modal functionality
+    span.onclick = function() {
+        modal.style.display = "none";
+    };
+
+    // Close modal on outside click
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    };
+</script>
 
 {% endblock %}

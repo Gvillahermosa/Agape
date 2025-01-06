@@ -3,16 +3,17 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .models import BibleVerse, JournalEntry
+from .models import BibleVerse, JournalEntry, Profile, Like, BibleVerse, SharedVerse, Bookmark,Prayer,PrayerTime
 from django.utils import timezone
 import random
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
-from .models import SharedVerse
 import json
-from .models import Profile, Like, BibleVerse
+from random import sample
+from django.utils.timezone import now
+from django.views.decorators.csrf import csrf_exempt
 
 
 VERSES = [
@@ -105,12 +106,60 @@ def dailyverse(request):
 
 
 def bibleTrivia(request):
-    return render(request, "html/bibleTrivia.html")
+    fname = request.session.get('fname')
+    return render(request, "html/bibleTrivia.html", {'fname': fname})
 
+@login_required  # Ensure the user is logged in
+def customprayers(request):
+    if request.method == "POST":
+        # Get data from the submitted form
+        prayer_title = request.POST.get('prayer_title')
+        prayer_text = request.POST.get('prayer_text')
+
+        # Save to the database
+        if prayer_title and prayer_text:  # Ensure both fields are provided
+            Prayer.objects.create(title=prayer_title, content=prayer_text, user=request.user)  # Link prayer to user
+
+        # Redirect to the prayer list
+        return redirect('viewcustomprayers')  # Replace with the name of your URL for the prayer list
+
+    # For GET requests, show the "Add Prayer" form
+    fname = request.session.get('fname')
+    return render(request, "html/custom_prayers.html", {'fname': fname})
+
+
+@login_required  # Ensure the user is logged in
+def viewcustomprayers(request):
+    fname = request.session.get('fname')
+    prayers = Prayer.objects.filter(user=request.user)  # Filter prayers by the logged-in user
+    return render(request, "html/view_custom_prayers.html", {'prayers': prayers, 'fname': fname})
+
+def setTime(request):
+    if request.method == 'POST':
+        prayer_time = request.POST.get('prayer_time')
+        # Create or update the user's prayer time
+        PrayerTime.objects.update_or_create(user=request.user, defaults={'prayer_time': prayer_time})
+        return redirect('setTime')  # Redirect to the same page or wherever appropriate
+
+    # Fetch existing prayer times
+    prayer_times = PrayerTime.objects.filter(user=request.user)
+    return render(request, 'html/set_time.html', {'prayer_times': prayer_times})
+
+
+# View to handle deletion of a prayer
+@csrf_exempt  # This is temporary; ensure proper CSRF handling for production
+def delete_prayer(request, id):
+    prayer = get_object_or_404(Prayer, id=id)  # Retrieve the prayer by ID
+
+    if request.method == "POST":
+        prayer.delete()  # Delete the prayer
+        return JsonResponse({'status': 'success'})  # Respond with success
+    else:
+        return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
 
 @login_required
 def edit_profile(request):
-    profile, created = Profile.objects.get_or_create(user=request.user)  # Create profile if it doesn't exist
+    profile, created = Profile.objects.get_or_create(user=request.user)
 
     if request.method == 'POST':
         profile.user.username = request.POST.get('username')
@@ -123,19 +172,35 @@ def edit_profile(request):
             profile.user.set_password(request.POST.get('password'))
 
         # Handle profile picture upload
-        if request.FILES.get('profile_picture'):
-            profile.profile_picture = request.FILES.get('profile_picture')
+        if 'profile_picture' in request.FILES:
+            profile.profile_picture = request.FILES['profile_picture']
 
         profile.user.save()
         profile.save()
-        return redirect('landing')  # Redirect to the profile page
+
+        # Store first name in session
+        request.session['fname'] = profile.user.first_name
+
+        return redirect('landing')
 
     return render(request, 'html/editProfile.html', {'profile': profile})
 
 
 
 def myLikes(request):
-    return render(request, "html/myLikes.html")
+    if request.method == "GET":
+        user = request.user
+        bookmarks = Bookmark.objects.filter(user=user).select_related('verse')
+        return render(request, 'html/myLikes.html', {'bookmarks': bookmarks})
+
+    elif request.method == "POST" and request.headers.get('Content-Type') == 'application/json':
+        data = json.loads(request.body)
+        bookmark_id = data.get('bookmark_id')
+        if bookmark_id:
+            bookmark = get_object_or_404(Bookmark, id=bookmark_id, user=request.user)
+            bookmark.delete()
+            return JsonResponse({'success': True})
+        return JsonResponse({'success': False, 'error': 'Bookmark not found'})
 
 
 @login_required
@@ -167,6 +232,7 @@ def rosaryguide(request):
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
+import re
 
 def signup(request):
     if request.method == "POST":
@@ -194,6 +260,16 @@ def signup(request):
           # Validate password length
         if len(pass1) < 8 and len(pass2) < 8:
             messages.error(request, "Password must be at least 8 characters long.", extra_tags='signup')
+            return render(request, "html/index.html", context)
+
+        # Check if password is all numbers
+        if pass1.isdigit() and pass2.isdigit():
+            messages.error(request, "Password must not consist of only numbers.", extra_tags='signup')
+            return render(request, "html/index.html", context)
+
+        # Check if password contains at least one letter
+        if not re.search(r'[a-zA-Z]', pass1):
+            messages.error(request, "Password must contain at least one letter.", extra_tags='signup')
             return render(request, "html/index.html", context)
 
         # Check if username already exists
@@ -259,71 +335,585 @@ def signout(request):
 
 
 #For the feelings
-
+@login_required
 def happyverses(request):
+    if request.method == "POST" and request.headers.get('Content-Type') == 'application/json':
+        data = json.loads(request.body)
+        verse_id = data.get('verse_id')
+        action = data.get('action')  # 'like', 'unlike', 'bookmark', 'unbookmark'
+
+        if verse_id and action:
+            try:
+                verse = BibleVerse.objects.get(id=verse_id)
+
+                # Handle 'like' and 'unlike' actions
+                if action == 'like':
+                    Like.objects.get_or_create(user=request.user, verse=verse)
+                elif action == 'unlike':
+                    Like.objects.filter(user=request.user, verse=verse).delete()
+
+                # Handle 'bookmark' and 'unbookmark' actions
+                elif action == 'bookmark':
+                    Bookmark.objects.get_or_create(user=request.user, verse=verse)
+                elif action == 'unbookmark':
+                    Bookmark.objects.filter(user=request.user, verse=verse).delete()
+
+                # Return updated like and bookmark count
+                like_count = Like.objects.filter(verse=verse).count()
+                bookmark_count = Bookmark.objects.filter(verse=verse).count()
+                return JsonResponse({'success': True, 'like_count': like_count, 'bookmark_count': bookmark_count})
+            except BibleVerse.DoesNotExist:
+                return JsonResponse({'success': False, 'error': 'Verse not found'})
+
+        return JsonResponse({'success': False, 'error': 'Invalid request'})
+
+    # Standard GET request handling
     fname = request.session.get('fname')
-    return render(request, "feelings/happy.html", {'fname': fname})
+
+    # Randomize the verses
+    happy_verses = BibleVerse.objects.filter(mood='happy').order_by('?')
+
+    liked_verses = Like.objects.filter(user=request.user).values_list('verse', flat=True)
+    bookmarked_verses = Bookmark.objects.filter(user=request.user).values_list('verse', flat=True)
+
+    for verse in happy_verses:
+        verse.like_count = Like.objects.filter(verse=verse).count()
+        verse.bookmark_count = Bookmark.objects.filter(verse=verse).count()
+
+    return render(request, "feelings/happy.html", {
+        'fname': fname,
+        'happy_verses': happy_verses,
+        'liked_verses': liked_verses,
+        'bookmarked_verses': bookmarked_verses
+    })
 
 
+
+@login_required
 def sadverse(request):
+    if request.method == "POST" and request.headers.get('Content-Type') == 'application/json':
+        data = json.loads(request.body)
+        verse_id = data.get('verse_id')
+        action = data.get('action')  # 'like', 'unlike', 'bookmark', 'unbookmark'
+
+        if verse_id and action:
+            try:
+                verse = BibleVerse.objects.get(id=verse_id)
+
+                # Handle 'like' and 'unlike' actions
+                if action == 'like':
+                    Like.objects.get_or_create(user=request.user, verse=verse)
+                elif action == 'unlike':
+                    Like.objects.filter(user=request.user, verse=verse).delete()
+
+                # Handle 'bookmark' and 'unbookmark' actions
+                elif action == 'bookmark':
+                    Bookmark.objects.get_or_create(user=request.user, verse=verse)
+                elif action == 'unbookmark':
+                    Bookmark.objects.filter(user=request.user, verse=verse).delete()
+
+                # Return updated like and bookmark count
+                like_count = Like.objects.filter(verse=verse).count()
+                bookmark_count = Bookmark.objects.filter(verse=verse).count()
+                return JsonResponse({'success': True, 'like_count': like_count, 'bookmark_count': bookmark_count})
+            except BibleVerse.DoesNotExist:
+                return JsonResponse({'success': False, 'error': 'Verse not found'})
+
+        return JsonResponse({'success': False, 'error': 'Invalid request'})
+
+    # Standard GET request handling
     fname = request.session.get('fname')
-    return render(request, "feelings/sad.html", {'fname': fname})
+
+    # Randomize the verses
+    sad_verses = BibleVerse.objects.filter(mood='sad').order_by('?')
+
+    liked_verses = Like.objects.filter(user=request.user).values_list('verse', flat=True)
+    bookmarked_verses = Bookmark.objects.filter(user=request.user).values_list('verse', flat=True)
+
+    for verse in sad_verses:
+        verse.like_count = Like.objects.filter(verse=verse).count()
+        verse.bookmark_count = Bookmark.objects.filter(verse=verse).count()
+
+    return render(request, "feelings/sad.html", {
+        'fname': fname,
+        'sad_verses': sad_verses,
+        'liked_verses': liked_verses,
+        'bookmarked_verses': bookmarked_verses
+    })
+
+
 
 @login_required
 def angryverse(request):
+    if request.method == "POST" and request.headers.get('Content-Type') == 'application/json':
+        data = json.loads(request.body)
+        verse_id = data.get('verse_id')
+        action = data.get('action')  # 'like', 'unlike', 'bookmark', 'unbookmark'
+
+        if verse_id and action:
+            try:
+                verse = BibleVerse.objects.get(id=verse_id)
+
+                # Handle 'like' and 'unlike' actions
+                if action == 'like':
+                    Like.objects.get_or_create(user=request.user, verse=verse)
+                elif action == 'unlike':
+                    Like.objects.filter(user=request.user, verse=verse).delete()
+
+                # Handle 'bookmark' and 'unbookmark' actions
+                elif action == 'bookmark':
+                    Bookmark.objects.get_or_create(user=request.user, verse=verse)
+                elif action == 'unbookmark':
+                    Bookmark.objects.filter(user=request.user, verse=verse).delete()
+
+                # Return updated like and bookmark count
+                like_count = Like.objects.filter(verse=verse).count()
+                bookmark_count = Bookmark.objects.filter(verse=verse).count()
+                return JsonResponse({'success': True, 'like_count': like_count, 'bookmark_count': bookmark_count})
+            except BibleVerse.DoesNotExist:
+                return JsonResponse({'success': False, 'error': 'Verse not found'})
+
+        return JsonResponse({'success': False, 'error': 'Invalid request'})
+
+    # Standard GET request handling
     fname = request.session.get('fname')
-    angry_verses = BibleVerse.objects.filter(mood='angry')  # Filter angry verses
-    liked_verses = Like.objects.filter(user=request.user).values_list('verse', flat=True)  # Get the liked verses for the user
 
-    if request.method == "POST":
-        verse_id = request.POST.get('verse_id')  # Get the verse ID from the submitted form
-        verse = BibleVerse.objects.get(id=verse_id)  # Retrieve the verse object
+    # Randomize the verses
+    angry_verses = BibleVerse.objects.filter(mood='angry').order_by('?')
 
-        # Check if the user has already liked the verse
-        if verse.id not in liked_verses:
-            # If the user has not liked it, create a like
-            Like.objects.create(user=request.user, verse=verse)
-        else:
-            # If the user has already liked it, delete the like (unlike)
-            Like.objects.filter(user=request.user, verse=verse).delete()
+    liked_verses = Like.objects.filter(user=request.user).values_list('verse', flat=True)
+    bookmarked_verses = Bookmark.objects.filter(user=request.user).values_list('verse', flat=True)
 
-        return redirect('angryverse')  # Redirect to the same page to avoid form resubmission
-
-    # Fetch the number of likes for each verse
     for verse in angry_verses:
         verse.like_count = Like.objects.filter(verse=verse).count()
+        verse.bookmark_count = Bookmark.objects.filter(verse=verse).count()
 
-    # Render the page with the verses, liked verses, and like counts
-    return render(request, "feelings/angry.html", {'fname': fname, 'angry_verses': angry_verses, 'liked_verses': liked_verses})
+    return render(request, "feelings/angry.html", {
+        'fname': fname,
+        'angry_verses': angry_verses,
+        'liked_verses': liked_verses,
+        'bookmarked_verses': bookmarked_verses
+    })
 
+
+
+@login_required
 def anxiousverse(request):
-    fname = request.session.get('fname')
-    return render(request, "feelings/anxious.html", {'fname': fname})
+    if request.method == "POST" and request.headers.get('Content-Type') == 'application/json':
+        data = json.loads(request.body)
+        verse_id = data.get('verse_id')
+        action = data.get('action')  # 'like', 'unlike', 'bookmark', 'unbookmark'
 
+        if verse_id and action:
+            try:
+                verse = BibleVerse.objects.get(id=verse_id)
+
+                # Handle 'like' and 'unlike' actions
+                if action == 'like':
+                    Like.objects.get_or_create(user=request.user, verse=verse)
+                elif action == 'unlike':
+                    Like.objects.filter(user=request.user, verse=verse).delete()
+
+                # Handle 'bookmark' and 'unbookmark' actions
+                elif action == 'bookmark':
+                    Bookmark.objects.get_or_create(user=request.user, verse=verse)
+                elif action == 'unbookmark':
+                    Bookmark.objects.filter(user=request.user, verse=verse).delete()
+
+                # Return updated like and bookmark count
+                like_count = Like.objects.filter(verse=verse).count()
+                bookmark_count = Bookmark.objects.filter(verse=verse).count()
+                return JsonResponse({'success': True, 'like_count': like_count, 'bookmark_count': bookmark_count})
+            except BibleVerse.DoesNotExist:
+                return JsonResponse({'success': False, 'error': 'Verse not found'})
+
+        return JsonResponse({'success': False, 'error': 'Invalid request'})
+
+    # Standard GET request handling
+    fname = request.session.get('fname')
+
+    # Randomize the verses
+    anxious_verses = BibleVerse.objects.filter(mood='anxious').order_by('?')
+
+    liked_verses = Like.objects.filter(user=request.user).values_list('verse', flat=True)
+    bookmarked_verses = Bookmark.objects.filter(user=request.user).values_list('verse', flat=True)
+
+    for verse in anxious_verses:
+        verse.like_count = Like.objects.filter(verse=verse).count()
+        verse.bookmark_count = Bookmark.objects.filter(verse=verse).count()
+
+    return render(request, "feelings/anxious.html", {
+        'fname': fname,
+        'anxious_verses': anxious_verses,
+        'liked_verses': liked_verses,
+        'bookmarked_verses': bookmarked_verses
+    })
+
+
+
+@login_required
 def worriedverse(request):
-    fname = request.session.get('fname')
-    return render(request, "feelings/worried.html", {'fname': fname})
+    if request.method == "POST" and request.headers.get('Content-Type') == 'application/json':
+        data = json.loads(request.body)
+        verse_id = data.get('verse_id')
+        action = data.get('action')  # 'like', 'unlike', 'bookmark', 'unbookmark'
 
+        if verse_id and action:
+            try:
+                verse = BibleVerse.objects.get(id=verse_id)
+
+                # Handle 'like' and 'unlike' actions
+                if action == 'like':
+                    Like.objects.get_or_create(user=request.user, verse=verse)
+                elif action == 'unlike':
+                    Like.objects.filter(user=request.user, verse=verse).delete()
+
+                # Handle 'bookmark' and 'unbookmark' actions
+                elif action == 'bookmark':
+                    Bookmark.objects.get_or_create(user=request.user, verse=verse)
+                elif action == 'unbookmark':
+                    Bookmark.objects.filter(user=request.user, verse=verse).delete()
+
+                # Return updated like and bookmark count
+                like_count = Like.objects.filter(verse=verse).count()
+                bookmark_count = Bookmark.objects.filter(verse=verse).count()
+                return JsonResponse({'success': True, 'like_count': like_count, 'bookmark_count': bookmark_count})
+            except BibleVerse.DoesNotExist:
+                return JsonResponse({'success': False, 'error': 'Verse not found'})
+
+        return JsonResponse({'success': False, 'error': 'Invalid request'})
+
+    # Standard GET request handling
+    fname = request.session.get('fname')
+
+    # Randomize the verses
+    worried_verses = BibleVerse.objects.filter(mood='worried').order_by('?')
+
+    liked_verses = Like.objects.filter(user=request.user).values_list('verse', flat=True)
+    bookmarked_verses = Bookmark.objects.filter(user=request.user).values_list('verse', flat=True)
+
+    for verse in worried_verses:
+        verse.like_count = Like.objects.filter(verse=verse).count()
+        verse.bookmark_count = Bookmark.objects.filter(verse=verse).count()
+
+    return render(request, "feelings/worried.html", {
+        'fname': fname,
+        'worried_verses': worried_verses,
+        'liked_verses': liked_verses,
+        'bookmarked_verses': bookmarked_verses
+    })
+
+
+@login_required
 def gratefulverse(request):
-    fname = request.session.get('fname')
-    return render(request, "feelings/grateful.html", {'fname': fname})
+    if request.method == "POST" and request.headers.get('Content-Type') == 'application/json':
+        data = json.loads(request.body)
+        verse_id = data.get('verse_id')
+        action = data.get('action')  # 'like', 'unlike', 'bookmark', 'unbookmark'
 
+        if verse_id and action:
+            try:
+                verse = BibleVerse.objects.get(id=verse_id)
+
+                # Handle 'like' and 'unlike' actions
+                if action == 'like':
+                    Like.objects.get_or_create(user=request.user, verse=verse)
+                elif action == 'unlike':
+                    Like.objects.filter(user=request.user, verse=verse).delete()
+
+                # Handle 'bookmark' and 'unbookmark' actions
+                elif action == 'bookmark':
+                    Bookmark.objects.get_or_create(user=request.user, verse=verse)
+                elif action == 'unbookmark':
+                    Bookmark.objects.filter(user=request.user, verse=verse).delete()
+
+                # Return updated like and bookmark count
+                like_count = Like.objects.filter(verse=verse).count()
+                bookmark_count = Bookmark.objects.filter(verse=verse).count()
+                return JsonResponse({'success': True, 'like_count': like_count, 'bookmark_count': bookmark_count})
+            except BibleVerse.DoesNotExist:
+                return JsonResponse({'success': False, 'error': 'Verse not found'})
+
+        return JsonResponse({'success': False, 'error': 'Invalid request'})
+
+    # Standard GET request handling
+    fname = request.session.get('fname')
+
+    # Randomize the verses
+    grateful_verses = BibleVerse.objects.filter(mood='grateful').order_by('?')
+
+    liked_verses = Like.objects.filter(user=request.user).values_list('verse', flat=True)
+    bookmarked_verses = Bookmark.objects.filter(user=request.user).values_list('verse', flat=True)
+
+    for verse in grateful_verses:
+        verse.like_count = Like.objects.filter(verse=verse).count()
+        verse.bookmark_count = Bookmark.objects.filter(verse=verse).count()
+
+    return render(request, "feelings/grateful.html", {
+        'fname': fname,
+        'grateful_verses': grateful_verses,
+        'liked_verses': liked_verses,
+        'bookmarked_verses': bookmarked_verses
+    })
+
+
+@login_required
 def frustratedverse(request):
-    fname = request.session.get('fname')
-    return render(request, "feelings/frustrated.html", {'fname': fname})
+    if request.method == "POST" and request.headers.get('Content-Type') == 'application/json':
+        data = json.loads(request.body)
+        verse_id = data.get('verse_id')
+        action = data.get('action')  # 'like', 'unlike', 'bookmark', 'unbookmark'
 
+        if verse_id and action:
+            try:
+                verse = BibleVerse.objects.get(id=verse_id)
+
+                # Handle 'like' and 'unlike' actions
+                if action == 'like':
+                    Like.objects.get_or_create(user=request.user, verse=verse)
+                elif action == 'unlike':
+                    Like.objects.filter(user=request.user, verse=verse).delete()
+
+                # Handle 'bookmark' and 'unbookmark' actions
+                elif action == 'bookmark':
+                    Bookmark.objects.get_or_create(user=request.user, verse=verse)
+                elif action == 'unbookmark':
+                    Bookmark.objects.filter(user=request.user, verse=verse).delete()
+
+                # Return updated like and bookmark count
+                like_count = Like.objects.filter(verse=verse).count()
+                bookmark_count = Bookmark.objects.filter(verse=verse).count()
+                return JsonResponse({'success': True, 'like_count': like_count, 'bookmark_count': bookmark_count})
+            except BibleVerse.DoesNotExist:
+                return JsonResponse({'success': False, 'error': 'Verse not found'})
+
+        return JsonResponse({'success': False, 'error': 'Invalid request'})
+
+    # Standard GET request handling
+    fname = request.session.get('fname')
+
+    # Randomize the verses
+    frustrated_verses = BibleVerse.objects.filter(mood='frustrated').order_by('?')
+
+    liked_verses = Like.objects.filter(user=request.user).values_list('verse', flat=True)
+    bookmarked_verses = Bookmark.objects.filter(user=request.user).values_list('verse', flat=True)
+
+    for verse in frustrated_verses:
+        verse.like_count = Like.objects.filter(verse=verse).count()
+        verse.bookmark_count = Bookmark.objects.filter(verse=verse).count()
+
+    return render(request, "feelings/frustrated.html", {
+        'fname': fname,
+        'frustrated_verses': frustrated_verses,
+        'liked_verses': liked_verses,
+        'bookmarked_verses': bookmarked_verses
+    })
+
+@login_required
 def lonelyverse(request):
-    fname = request.session.get('fname')
-    return render(request, "feelings/lonely.html", {'fname': fname})
+    if request.method == "POST" and request.headers.get('Content-Type') == 'application/json':
+        data = json.loads(request.body)
+        verse_id = data.get('verse_id')
+        action = data.get('action')  # 'like', 'unlike', 'bookmark', 'unbookmark'
 
+        if verse_id and action:
+            try:
+                verse = BibleVerse.objects.get(id=verse_id)
+
+                # Handle 'like' and 'unlike' actions
+                if action == 'like':
+                    Like.objects.get_or_create(user=request.user, verse=verse)
+                elif action == 'unlike':
+                    Like.objects.filter(user=request.user, verse=verse).delete()
+
+                # Handle 'bookmark' and 'unbookmark' actions
+                elif action == 'bookmark':
+                    Bookmark.objects.get_or_create(user=request.user, verse=verse)
+                elif action == 'unbookmark':
+                    Bookmark.objects.filter(user=request.user, verse=verse).delete()
+
+                # Return updated like and bookmark count
+                like_count = Like.objects.filter(verse=verse).count()
+                bookmark_count = Bookmark.objects.filter(verse=verse).count()
+                return JsonResponse({'success': True, 'like_count': like_count, 'bookmark_count': bookmark_count})
+            except BibleVerse.DoesNotExist:
+                return JsonResponse({'success': False, 'error': 'Verse not found'})
+
+        return JsonResponse({'success': False, 'error': 'Invalid request'})
+
+    # Standard GET request handling
+    fname = request.session.get('fname')
+
+    # Randomize the verses
+    lonely_verses = BibleVerse.objects.filter(mood='lonely').order_by('?')
+
+    liked_verses = Like.objects.filter(user=request.user).values_list('verse', flat=True)
+    bookmarked_verses = Bookmark.objects.filter(user=request.user).values_list('verse', flat=True)
+
+    for verse in lonely_verses:
+        verse.like_count = Like.objects.filter(verse=verse).count()
+        verse.bookmark_count = Bookmark.objects.filter(verse=verse).count()
+
+    return render(request, "feelings/lonely.html", {
+        'fname': fname,
+        'lonely_verses': lonely_verses,
+        'liked_verses': liked_verses,
+        'bookmarked_verses': bookmarked_verses
+    })
+
+
+@login_required
 def hopefulverse(request):
-    fname = request.session.get('fname')
-    return render(request, "feelings/hopeful.html", {'fname': fname})
+    if request.method == "POST" and request.headers.get('Content-Type') == 'application/json':
+        data = json.loads(request.body)
+        verse_id = data.get('verse_id')
+        action = data.get('action')  # 'like', 'unlike', 'bookmark', 'unbookmark'
 
+        if verse_id and action:
+            try:
+                verse = BibleVerse.objects.get(id=verse_id)
+
+                # Handle 'like' and 'unlike' actions
+                if action == 'like':
+                    Like.objects.get_or_create(user=request.user, verse=verse)
+                elif action == 'unlike':
+                    Like.objects.filter(user=request.user, verse=verse).delete()
+
+                # Handle 'bookmark' and 'unbookmark' actions
+                elif action == 'bookmark':
+                    Bookmark.objects.get_or_create(user=request.user, verse=verse)
+                elif action == 'unbookmark':
+                    Bookmark.objects.filter(user=request.user, verse=verse).delete()
+
+                # Return updated like and bookmark count
+                like_count = Like.objects.filter(verse=verse).count()
+                bookmark_count = Bookmark.objects.filter(verse=verse).count()
+                return JsonResponse({'success': True, 'like_count': like_count, 'bookmark_count': bookmark_count})
+            except BibleVerse.DoesNotExist:
+                return JsonResponse({'success': False, 'error': 'Verse not found'})
+
+        return JsonResponse({'success': False, 'error': 'Invalid request'})
+
+    # Standard GET request handling
+    fname = request.session.get('fname')
+
+    # Randomize the verses
+    hopeful_verses = BibleVerse.objects.filter(mood='hopeful').order_by('?')
+
+    liked_verses = Like.objects.filter(user=request.user).values_list('verse', flat=True)
+    bookmarked_verses = Bookmark.objects.filter(user=request.user).values_list('verse', flat=True)
+
+    for verse in hopeful_verses:
+        verse.like_count = Like.objects.filter(verse=verse).count()
+        verse.bookmark_count = Bookmark.objects.filter(verse=verse).count()
+
+    return render(request, "feelings/hopeful.html", {
+        'fname': fname,
+        'hopeful_verses': hopeful_verses,
+        'liked_verses': liked_verses,
+        'bookmarked_verses': bookmarked_verses
+    })
+
+
+@login_required
 def overwhelmedverse(request):
-    fname = request.session.get('fname')
-    return render(request, "feelings/overwhelmed.html", {'fname': fname})
+    if request.method == "POST" and request.headers.get('Content-Type') == 'application/json':
+        data = json.loads(request.body)
+        verse_id = data.get('verse_id')
+        action = data.get('action')  # 'like', 'unlike', 'bookmark', 'unbookmark'
 
-def confusedverse(request):
+        if verse_id and action:
+            try:
+                verse = BibleVerse.objects.get(id=verse_id)
+
+                # Handle 'like' and 'unlike' actions
+                if action == 'like':
+                    Like.objects.get_or_create(user=request.user, verse=verse)
+                elif action == 'unlike':
+                    Like.objects.filter(user=request.user, verse=verse).delete()
+
+                # Handle 'bookmark' and 'unbookmark' actions
+                elif action == 'bookmark':
+                    Bookmark.objects.get_or_create(user=request.user, verse=verse)
+                elif action == 'unbookmark':
+                    Bookmark.objects.filter(user=request.user, verse=verse).delete()
+
+                # Return updated like and bookmark count
+                like_count = Like.objects.filter(verse=verse).count()
+                bookmark_count = Bookmark.objects.filter(verse=verse).count()
+                return JsonResponse({'success': True, 'like_count': like_count, 'bookmark_count': bookmark_count})
+            except BibleVerse.DoesNotExist:
+                return JsonResponse({'success': False, 'error': 'Verse not found'})
+
+        return JsonResponse({'success': False, 'error': 'Invalid request'})
+
+    # Standard GET request handling
     fname = request.session.get('fname')
-    return render(request, "feelings/confused.html", {'fname': fname})
+
+    # Randomize the verses
+    overwhelmed_verses = BibleVerse.objects.filter(mood='overwhelmed').order_by('?')
+
+    liked_verses = Like.objects.filter(user=request.user).values_list('verse', flat=True)
+    bookmarked_verses = Bookmark.objects.filter(user=request.user).values_list('verse', flat=True)
+
+    for verse in overwhelmed_verses:
+        verse.like_count = Like.objects.filter(verse=verse).count()
+        verse.bookmark_count = Bookmark.objects.filter(verse=verse).count()
+
+    return render(request, "feelings/overwhelmed.html", {
+        'fname': fname,
+        'overwhelmed_verses': overwhelmed_verses,
+        'liked_verses': liked_verses,
+        'bookmarked_verses': bookmarked_verses
+    })
+@login_required
+def confusedverse(request):
+    if request.method == "POST" and request.headers.get('Content-Type') == 'application/json':
+        data = json.loads(request.body)
+        verse_id = data.get('verse_id')
+        action = data.get('action')  # 'like', 'unlike', 'bookmark', 'unbookmark'
+
+        if verse_id and action:
+            try:
+                verse = BibleVerse.objects.get(id=verse_id)
+
+                # Handle 'like' and 'unlike' actions
+                if action == 'like':
+                    Like.objects.get_or_create(user=request.user, verse=verse)
+                elif action == 'unlike':
+                    Like.objects.filter(user=request.user, verse=verse).delete()
+
+                # Handle 'bookmark' and 'unbookmark' actions
+                elif action == 'bookmark':
+                    Bookmark.objects.get_or_create(user=request.user, verse=verse)
+                elif action == 'unbookmark':
+                    Bookmark.objects.filter(user=request.user, verse=verse).delete()
+
+                # Return updated like and bookmark count
+                like_count = Like.objects.filter(verse=verse).count()
+                bookmark_count = Bookmark.objects.filter(verse=verse).count()
+                return JsonResponse({'success': True, 'like_count': like_count, 'bookmark_count': bookmark_count})
+            except BibleVerse.DoesNotExist:
+                return JsonResponse({'success': False, 'error': 'Verse not found'})
+
+        return JsonResponse({'success': False, 'error': 'Invalid request'})
+
+    # Standard GET request handling
+    fname = request.session.get('fname')
+
+    # Randomize the verses
+    confused_verses = BibleVerse.objects.filter(mood='confused').order_by('?')
+
+    liked_verses = Like.objects.filter(user=request.user).values_list('verse', flat=True)
+    bookmarked_verses = Bookmark.objects.filter(user=request.user).values_list('verse', flat=True)
+
+    for verse in confused_verses:
+        verse.like_count = Like.objects.filter(verse=verse).count()
+        verse.bookmark_count = Bookmark.objects.filter(verse=verse).count()
+
+    return render(request, "feelings/confused.html", {
+        'fname': fname,
+        'confused_verses': confused_verses,
+        'liked_verses': liked_verses,
+        'bookmarked_verses': bookmarked_verses
+    })

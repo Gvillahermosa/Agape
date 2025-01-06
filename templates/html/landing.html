@@ -12,47 +12,68 @@
     <div class="container">
         <div class="left-section">
             <div class="logo">
-                {% if request.user.is_authenticated and profile_picture_url %}
-                <img src="{{ profile_picture_url }}" alt="Profile Picture" id="current-picture" class="user-icon" onclick="toggleMenu()">
+                {% if request.user.is_authenticated %}
+                {% if profile_picture_url %}
+                    <img src="{{ profile_picture_url }}" alt="Profile Picture" id="current-picture" class="user-icon" onclick="toggleMenu()">
+                {% else %}
+                <img src="{% static 'images/account.png' %}" alt="Default Profile Picture" id="current-picture" class="user-icon" onclick="toggleMenu()">
                 {% endif %}
+            {% endif %}
+
 
                 <h1>AGAPE</h1>
                 <div class="sub-menu-wrap" id="subMenu">
                     <div class="sub-menu">
                         <div class="user-info">
-                            <img src="{{ profile_picture_url }}" alt="Profile Picture">
-                        <h2>{{ fname }}</h2>
+                            {% if profile_picture_url %}
+                                <img src="{{ profile_picture_url }}" alt="Profile Picture">
+                            {% else %}
+                                <img src="{% static 'images/default-profile.png' %}" alt="Default Profile Picture">
+                            {% endif %}
+                            <h2>{{ fname }}</h2>
                         </div>
                         <hr>
 
                         <a href="{% url 'editProfile' %}" class="sub-menu-link">
-                        <img src="{% static 'images/profile.png' %}" alt="profile">
-                        <p>Edit Profile</p>
-                        <span>></span>
+                            <img src="{% static 'images/profile.png' %}" alt="profile">
+                            <p>Edit Profile</p>
+                            <span>></span>
                         </a>
 
                         <a href="{% url 'myLikes' %}" class="sub-menu-link">
-                        <img src="{% static 'images/bookmark.png' %}" alt="profile">
-                        <p>Bookmarked</p>
-                        <span>></span>
+                            <img src="{% static 'images/bookmark.png' %}" alt="profile">
+                            <p>Bookmarked</p>
+                            <span>></span>
+                        </a>
+
+                        <a href="{% url 'customprayers' %}" class="sub-menu-link">
+                            <img src="{% static 'images/praying.png' %}" alt="profile">
+                            <p>Prayer</p>
+                            <span>></span>
+                        </a>
+                        <a href="https://ebible.org/study/?v1=LK20_10&t1=local%3Aeng-web-c&w1=bible" class="sub-menu-link">
+                            <img src="{% static 'images/bible.png' %}" alt="profile">
+                            <p>E-Bible</p>
+                            <span>></span>
                         </a>
                         <a href="/signout" class="sub-menu-link">
-                        <img src="{% static 'images/logout.png' %}" alt="profile">
-                        <p>Logout</p>
-                        <span>></span>
-                        </a>
+                            <img src="{% static 'images/logout.png' %}" alt="profile">
+                            <p>Logout</p>
+                            <span>></span>
+
                     </div>
                 </div>
             </div>
 
             <div class="content">
-                <h2>Find Peace in Scripture</h2>
-                <p>start your journey of spirituality with us in every step of the way</p>
+                <h2 style="color: white;">Find Peace in Scripture</h2>
+                <p style="color: white;">start your journey of spirituality with us in every step of the way</p>
             </div>
             <div class="button">
                 <button class="get-started-btn"><a href="{% url 'findyourverse' %}">GET STARTED</a></button>
             </div>
         </div>
+
         <div class="right-section">
             <nav>
                 <a href="{% url 'findyourverse' %}">FIND YOUR VERSE</a>
@@ -87,5 +108,10 @@
         </div>
     </div>
     <script src="{% static 'javascript/index.js' %}"></script>
+    {% if messages %}
+    <script>
+        alert("{% for message in messages %}{{ message }}{% endfor %}");
+    </script>
+{% endif %}
 </body>
 </html>

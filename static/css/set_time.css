@@ -1,0 +1,147 @@
+/* Remove scrollbar */
+body::-webkit-scrollbar {
+    display: none;
+}
+
+body {
+    background-image: url(../images/rosarybg.png);
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+  /* Main container styles */
+  .main-contents {
+    display: flex; /* Use flexbox for easier height management */
+    flex-direction: column; /* Align items vertically */
+    height: 100%; /* Main container takes full viewport height */
+    background-color: #bd1f1f; /* Red background */
+    color: white;
+    padding: 20px;
+    border-radius: 15px;
+    max-width: 900px;
+    margin: 30px auto;
+    height: 550px;
+  }
+
+
+
+h3{
+    color: black;
+    text-align: center;
+    margin-top: -10px;
+  }
+
+  .prayer-list-container {
+    display: flex;
+    background-color: #a71c1c; /* Lighter red */
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .sidebar {
+    width: 200px;
+    background-color: #8f1717; /* Even lighter red */
+    padding: 10px 0;
+    color: white;
+    height: 450px;
+  }
+
+  .sidebar a{
+    text-decoration: none;
+    color: white;
+}
+  .side-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .side-item span{
+    margin-left: 5px;
+  }
+  .side-item a {
+    color: white;
+    text-decoration: none;
+  }
+
+  .side-item.active {
+    background-color: #bd1f1f;
+  }
+
+  .side-item:hover {
+    background-color: #b02121;
+  }
+
+  /* General Styles for Prayer Time Section */
+.prayer-list-content {
+    background-color: #ffffff; /* White background for contrast */
+    padding: 20px;
+    border-radius: 10px; /* Rounded corners */
+    flex: 1;
+    border-radius: 0px 8px 8px 0px;
+}
+
+/* Label Styles */
+.prayer-list-content label {
+    margin-top: 20px;
+    font-size: 18px; /* Larger font for better readability */
+    font-weight: bold; /* Bold label text */
+    color: #333; /* Dark grey color */
+}
+
+/* Input Styles */
+input[type="time"] {
+    padding: 10px; /* Padding for comfort */
+    font-size: 14px; /* Increase font size */
+    border-radius: 5px; /* Slightly rounded corners */
+    width:500px; /* Full width minus padding */
+    margin: 10px 0; /* Vertical margin to separate from other elements */
+    transition: border-color 0.3s; /* Smooth border color transition */
+    text-align: center; /* Center the text */
+}
+
+/* Focus Styles for Input */
+input[type="time"]:focus {
+    outline: none; /* Remove outline */
+
+}
+
+/* Button Styles */
+button {
+    background-color: #007bff; /* Primary blue color */
+    color: white; /* White text */
+    border: none; /* No border */
+    padding: 10px 15px; /* Padding for the button */
+    border-radius: 5px; /* Rounded corners */
+    font-size: 16px; /* Increase font size */
+    cursor: pointer; /* Pointer cursor */
+    transition: background-color 0.3s; /* Smooth transition for background color */
+}
+
+/* Button Hover Styles */
+button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* Saved Prayer Times List Styles */
+ul {
+    padding: 0; /* Remove padding */
+    list-style-type: none; /* Remove default list styling */
+}
+
+ul li {
+    font-size: 18px;
+    color: black;
+    margin: 5px 0; /* Vertical spacing */
+    padding: 10px; /* Padding for list items */
+    border-radius: 5px; /* Rounded corners */
+
+}

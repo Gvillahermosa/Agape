@@ -1,0 +1,137 @@
+{% extends "html/header.html" %}
+{% load static %}
+
+{% block title %} Bible Trivia - Set Prayer Time {% endblock %}
+
+{% block additional_css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="stylesheet" href="{% static 'css/set_time.css' %}">
+{% endblock %}
+
+{% block bodycontents %}
+
+<div class="main-contents">
+
+  <h1>Set Your Prayer Time</h1>
+
+  <div class="prayer-list-container">
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <a href="{% url 'customprayers' %}">
+        <div class="side-item">
+          <i class="fas fa-plus-circle"></i>
+          <span>Add Prayer</span>
+        </div>
+      </a>
+      <a href="{% url 'viewcustomprayers' %}">
+        <div class="side-item">
+          <i class="fas fa-list"></i>
+          <span>Prayer List</span>
+        </div>
+      </a>
+      <a href="{% url 'setTime' %}">
+        <div class="side-item active">
+          <i class="fa-regular fa-clock"></i>
+          <span>Set Time To Pray</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="prayer-list-content">
+        <form id="prayerTimeForm" method="POST" action="{% url 'setTime' %}">
+            {% csrf_token %}
+            <label for="prayerTime" style="color: black;">Select your prayer time:</label>
+            <input type="time" id="prayerTime" name="prayer_time" required>
+            <button type="submit" id="setPrayerTime">Set Prayer Time</button>
+        </form>
+
+        <div id="errorMessage" style="color: red; margin-top: 10px;">
+            {% if error_message %}
+                {{ error_message }}
+            {% endif %}
+        </div>
+
+        <div id="notificationMessage" style="margin-top: 10px;"></div>
+
+        <h3 style="margin-top: 30px;">Saved Prayer Times:</h3>
+        <ul>
+            {% for item in prayer_times %}
+                <li>{{ item.prayer_time }}</li>
+            {% empty %}
+                <li>No prayer times set.</li>
+            {% endfor %}
+        </ul>
+
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        if (Notification.permission !== "granted") {
+            Notification.requestPermission();
+        }
+    });
+
+    document.getElementById("setPrayerTime").onclick = function(event) {
+        const prayerTime = document.getElementById("prayerTime").value;
+
+        if (prayerTime) {
+            const [hours, minutes] = prayerTime.split(':');
+            const now = new Date();
+            const prayerDateTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes, 0);
+
+            // Check if the selected time is in the past
+            if (prayerDateTime <= now) {
+                alert("The selected time is in the past. Please choose a future time.");
+                event.preventDefault(); // Prevent form submission
+                return;
+            }
+
+            const notificationMessage = document.getElementById("notificationMessage");
+            notificationMessage.textContent = `You have set your prayer time to ${prayerTime}.`;
+
+            if (Notification.permission === "granted") {
+                sendPrayerNotification("Prayer Time Set", `You have set your prayer time to ${prayerTime}.`);
+            } else {
+                Notification.requestPermission().then(function(permission) {
+                    if (permission === 'granted') {
+                        sendPrayerNotification("Prayer Time Set", `You have set your prayer time to ${prayerTime}.`);
+                    } else {
+                        alert("Notification permission denied. You won't receive notifications.");
+                    }
+                });
+            }
+
+            scheduleNotification(prayerTime);
+        }
+    };
+
+    function scheduleNotification(prayerTime) {
+        const [hours, minutes] = prayerTime.split(':');
+        const now = new Date();
+        const prayerDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes, 0);
+
+        const timeToPray = prayerDate.getTime() - now.getTime();
+
+        if (timeToPray > 0) {
+            setTimeout(() => {
+                sendPrayerNotification(`${prayerTime} Prayer Time!`, `It's time for your prayer at ${prayerTime}.`);
+            }, timeToPray);
+        }
+    }
+
+    function sendPrayerNotification(title, message) {
+        if (Notification.permission === 'granted') {
+            new Notification(title, {
+                body: message,
+                icon: 'icon.png' // Optional: URL to an icon
+            });
+        }
+    }
+</script>
+
+{% endblock %}

@@ -3,13 +3,71 @@
 {% block title %} Bible Trivia {% endblock %}
 {% block additional_css %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-<link rel="stylesheet" href="{% static 'css/bibleTrivia.css' %}">
+<link rel="stylesheet" href="{% static 'css/bookmarks.css' %}">
+
 {% endblock %}
 {% block bodycontents %}
 <div class="main-contents">
-    <h1>My Liked Verses</h1>
-    
-    
+    <h1>My Bookmark Verses</h1>
+    {% if bookmarks %}
+    {% for bookmark in bookmarks %}
+    <div class="bookmark-contents" id="bookmark-{{ bookmark.id }}">
+        <div class="bookmark-title">
+            <div class="profile-icon">
+            <img src="{{ profile_picture_url }}" alt="Profile Picture" id="current-picture">
+        </div>
+        <div class="heade-title">
+            ‎
+        </div>
+        </div>
+        <div class="verse-content">
+            <p id="title">You bookmarked <span style="font-weight: bold;">{{ bookmark.verse.reference }}</span></p>
+            <div class="side-line">
+                .
+            </div>
+            <p>{{ bookmark.verse.verse_text }}</p>
+            <p>{{ bookmark.verse.reference }}</p>
+            <button class="delete-btn" data-bookmark-id="{{ bookmark.id }}">
+                <img src="{% static 'images/delete.png' %}" alt="Delete">
+            </button>
+
+        </div>
     </div>
-</div>
+    {% endfor %}
+    {% else %}
+        <p>No bookmarks found.</p>
+    {% endif %}
+    </div>
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <script>
+       document.addEventListener('DOMContentLoaded', () => {
+        const deleteButtons = document.querySelectorAll('.delete-btn');
+
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const bookmarkId = button.getAttribute('data-bookmark-id');
+
+                fetch('{% url "myLikes" %}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': document.querySelector('[name=csrf-token]').content  // Get CSRF token from meta tag
+                    },
+                    body: JSON.stringify({ bookmark_id: bookmarkId })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const bookmarkElement = document.getElementById(`bookmark-${bookmarkId}`);
+                        bookmarkElement.remove();  // Remove the bookmark element from the page
+                        // Show success alert
+                        alert('Bookmark successfully deleted!');
+                    } else {
+                        alert('Failed to delete bookmark');
+                    }
+                });
+            });
+        });
+    });
+    </script>
 {% endblock %}

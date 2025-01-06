@@ -79,13 +79,16 @@
     align-items: center; /* Ensures icons align properly in the center */
 }
 
-.details button {
+
+
+.choosebtn{
     font-size: 14px;
     font-weight: 700;
     padding: 10px 20px;
     border: none;
     border-radius: 10px;
     cursor: pointer;
+    background-color: rgba(255, 255, 255);
 }
 
 .details button a {
@@ -98,8 +101,20 @@
 }
 
 .bookmark-btn{
+    font-size: 14px;
+    font-weight: 700;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0);
+}
+
+.bookmark-btn img{
+    height: 40px;
+    width: 40px;
     margin-left: -10px;
-    background: none;
+    background-color: rgba(255, 255, 255, 0);
 }
 
 .fontisto--favorite {
@@ -111,8 +126,9 @@
 }
 
 .share-btn {
-    width: 2.2em;
-    height: 2.2em;
+    border: none;
+    width: 3em;
+    height: 3em;
     background: none;
     background-repeat: no-repeat;
     background-size: 100% 100%;
@@ -141,13 +157,11 @@
 }
 
 
-#like_count{
+.like-count{
     margin-top: 110px;
-    margin-left: -150px;
+    margin-left: -160px;
     position: absolute;
 }
-
-
 
   /* swiper button css */
   .nav-btn {

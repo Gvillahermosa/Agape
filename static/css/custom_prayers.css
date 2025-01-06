@@ -1,0 +1,140 @@
+/* Remove scrollbar */
+body::-webkit-scrollbar {
+    display: none;
+}
+
+body {
+    background-image: url(../images/rosarybg.png);
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+  /* Main container styles */
+  .main-contents {
+    background-color: #bd1f1f; /* Red background */
+    color: white;
+    padding: 20px;
+    border-radius: 15px;
+    max-width: 900px;
+    margin: 30px auto;
+    height: 550px;
+  }
+
+.sidebar a{
+    text-decoration: none;
+}
+
+  .main-contents h1 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  /* Prayer Container: Sidebar + Content */
+  .prayer-container {
+    display: flex;
+    background-color: #a71c1c; /* Slightly darker red for contrast */
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  /* Sidebar Styles */
+  .sidebar {
+    height: 450px;
+    width: 200px;
+    background-color: #8f1717;
+    display: flex;
+    flex-direction: column;
+    padding: 10px 0;
+  }
+
+  .side-item {
+    display: flex;
+    align-items: center;
+    color: white;
+    padding: 15px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+  }
+
+  .side-item i {
+    margin-right: 10px;
+  }
+
+  .side-item.active {
+    background-color: #bd1f1f;
+  }
+
+  .side-item:hover {
+    background-color: #b02121;
+  }
+
+  /* Content Area Styles */
+  .content-area {
+    flex: 1; /* Take remaining space */
+    background-color: #fff; /* White background */
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    border-radius: 0px 8px 8px 0px;
+    position: relative; /* To position Save button */
+  }
+
+  .prayer-title {
+    margin-left: -320px;
+    position: absolute;
+    width: 30%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    border: 2px solid #D9D9D9;
+    font-size: 16px;
+    color: #555;
+  }
+
+  .prayer-text {
+    position: absolute;
+    border-radius: 10px;
+    padding: 10px;
+    border-radius: 4px;
+    border: 2px solid #D9D9D9;
+    font-size: 16px;
+    color: #555;
+    resize: none;
+    height: 304px;
+    width: 89%;
+    margin-left: -320px;
+    margin-top: 50px;
+  }
+
+  /* Remove focus styling */
+.prayer-title:focus,
+.prayer-text:focus {
+  outline: none; /* Removes the default blue outline on focus */
+  box-shadow: none; /* Prevents any box-shadow effects */
+}
+
+
+  /* Save Button */
+  .save-button {
+    width:100px;
+    background-color: #27ae60; /* Green */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    transition: background-color 0.3s ease;
+  }
+
+  .save-button:hover {
+    background-color: #219653; /* Darker green on hover */
+  }
