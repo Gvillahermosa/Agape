@@ -1,4 +1,5 @@
 from django.shortcuts import redirect, render
+import logging
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
@@ -193,6 +194,9 @@ def edit_profile(request):
 
 
 
+logger = logging.getLogger(__name__)
+
+@login_required
 def myLikes(request):
     if request.method == "GET":
         user = request.user
@@ -200,13 +204,26 @@ def myLikes(request):
         return render(request, 'html/myLikes.html', {'bookmarks': bookmarks})
 
     elif request.method == "POST" and request.headers.get('Content-Type') == 'application/json':
-        data = json.loads(request.body)
-        bookmark_id = data.get('bookmark_id')
-        if bookmark_id:
+        try:
+            data = json.loads(request.body)
+            bookmark_id = data.get('bookmark_id')
+            if not bookmark_id:
+                logger.warning("No bookmark ID provided in deletion request.")
+                return JsonResponse({'success': False, 'error': 'No bookmark ID provided.'}, status=400)
+
             bookmark = get_object_or_404(Bookmark, id=bookmark_id, user=request.user)
             bookmark.delete()
+            logger.info(f"Bookmark with ID {bookmark_id} deleted by user {request.user.username}.")
             return JsonResponse({'success': True})
-        return JsonResponse({'success': False, 'error': 'Bookmark not found'})
+        except json.JSONDecodeError:
+            logger.error("Invalid JSON data received for bookmark deletion.")
+            return JsonResponse({'success': False, 'error': 'Invalid JSON data.'}, status=400)
+        except Exception as e:
+            logger.exception("An unexpected error occurred while deleting a bookmark.")
+            return JsonResponse({'success': False, 'error': 'An error occurred while deleting the bookmark.'}, status=500)
+
+    logger.warning("Invalid request method attempted on myLikes view.")
+    return JsonResponse({'success': False, 'error': 'Invalid request method.'}, status=405)
 
 
 @login_required

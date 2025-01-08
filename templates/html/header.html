@@ -55,10 +55,13 @@
                             <p>E-Bible</p>
                             <span>></span>
                         </a>
-                        <a href="/signout" class="sub-menu-link">
-                        <img src="{% static 'images/logout.png' %}" alt="profile">
-                        <p>Logout</p>
-                        <span>></span>
+                        <a href="/signout" class="sub-menu-link" id="logout-button">
+
+                            <img src="{% static 'images/logout.png' %}" alt="profile">
+
+                            <p>Logout</p>
+
+                            <span>></span>
                         </a>
                     </div>
                 </div>
@@ -75,5 +78,41 @@
 
             {% endblock %}
             <script src="{% static 'javascript/header.js' %}"></script>
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+document.addEventListener('DOMContentLoaded', () => {
+    const logoutButton = document.getElementById('logout-button');
+
+    logoutButton.addEventListener('click', function(event) {
+        event.preventDefault(); // Prevent the default logout action
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "Do you really want to log out?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33', // Red color for confirmation
+            cancelButtonColor: '#3085d6', // Blue color for cancellation
+            confirmButtonText: 'Yes, log out!',
+            cancelButtonText: 'No, stay'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Show success message
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Logged out!',
+                    text: 'You have been successfully logged out.',
+                    timer: 1800,
+                    showConfirmButton: false
+                }).then(() => {
+                    // Redirect to the logout URL after the SweetAlert
+                    window.location.href = logoutButton.href;
+                });
+            }
+        });
+    });
+});
+    </script>
     </body>
 </html>

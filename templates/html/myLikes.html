@@ -38,36 +38,99 @@
         <p>No bookmarks found.</p>
     {% endif %}
     </div>
-    <meta name="csrf-token" content="{{ csrf_token }}">
-    <script>
-       document.addEventListener('DOMContentLoaded', () => {
+   <!-- CSRF Token for AJAX POST requests -->
+<meta name="csrf-token" content="{{ csrf_token }}">
+
+<!-- Include SweetAlert2 Library -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    // Function to retrieve CSRF token from cookies
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    const csrftoken = getCookie('csrftoken');
+
+    document.addEventListener('DOMContentLoaded', () => {
         const deleteButtons = document.querySelectorAll('.delete-btn');
 
         deleteButtons.forEach(button => {
             button.addEventListener('click', () => {
                 const bookmarkId = button.getAttribute('data-bookmark-id');
 
-                fetch('{% url "myLikes" %}', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': document.querySelector('[name=csrf-token]').content  // Get CSRF token from meta tag
-                    },
-                    body: JSON.stringify({ bookmark_id: bookmarkId })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        const bookmarkElement = document.getElementById(`bookmark-${bookmarkId}`);
-                        bookmarkElement.remove();  // Remove the bookmark element from the page
-                        // Show success alert
-                        alert('Bookmark successfully deleted!');
-                    } else {
-                        alert('Failed to delete bookmark');
+                // Show SweetAlert confirmation dialog
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "Do you really want to delete this bookmark? This action cannot be undone.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Yes, delete it!',
+                    cancelButtonText: 'No, cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Proceed with deletion via fetch
+                        fetch('{% url "myLikes" %}', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRFToken': csrftoken // Include CSRF token
+                            },
+                            body: JSON.stringify({ bookmark_id: bookmarkId })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                const bookmarkElement = document.getElementById(`bookmark-${bookmarkId}`);
+                                bookmarkElement.remove();  // Remove the bookmark element from the page
+                                // Show SweetAlert success notification
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Deleted!',
+                                    text: 'Your bookmark has been deleted.',
+                                    timer: 1500,
+                                    showConfirmButton: false
+                                });
+                            } else {
+                                // Show SweetAlert error notification
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: data.error || 'Failed to delete bookmark.',
+                                    timer: 2000,
+                                    showConfirmButton: false
+                                });
+                            }
+                        })
+                        .catch((error) => {
+                            console.error('Error:', error);
+                            // Show SweetAlert error notification
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'An unexpected error occurred. Please try again later.',
+                                timer: 2000,
+                                showConfirmButton: false
+                            });
+                        });
                     }
                 });
             });
         });
     });
-    </script>
+</script>
 {% endblock %}
