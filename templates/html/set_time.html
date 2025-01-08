@@ -54,7 +54,7 @@
 
         <div id="notificationMessage" style="margin-top: 10px;"></div>
 
-        <h3 style="margin-top: 30px;">Saved Prayer Times:</h3>
+        <h3 style="margin-top: 30px;">Saved Prayer Time:</h3>
         <ul>
             {% for item in prayer_times %}
                 <li>{{ item.prayer_time }}</li>
@@ -71,67 +71,93 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        if (Notification.permission !== "granted") {
-            Notification.requestPermission();
-        }
-    });
-
-    document.getElementById("setPrayerTime").onclick = function(event) {
-        const prayerTime = document.getElementById("prayerTime").value;
-
-        if (prayerTime) {
-            const [hours, minutes] = prayerTime.split(':');
-            const now = new Date();
-            const prayerDateTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes, 0);
-
-            // Check if the selected time is in the past
-            if (prayerDateTime <= now) {
-                alert("The selected time is in the past. Please choose a future time.");
-                event.preventDefault(); // Prevent form submission
-                return;
-            }
-
-            const notificationMessage = document.getElementById("notificationMessage");
-            notificationMessage.textContent = `You have set your prayer time to ${prayerTime}.`;
-
-            if (Notification.permission === "granted") {
-                sendPrayerNotification("Prayer Time Set", `You have set your prayer time to ${prayerTime}.`);
-            } else {
-                Notification.requestPermission().then(function(permission) {
-                    if (permission === 'granted') {
-                        sendPrayerNotification("Prayer Time Set", `You have set your prayer time to ${prayerTime}.`);
-                    } else {
-                        alert("Notification permission denied. You won't receive notifications.");
-                    }
-                });
-            }
-
-            scheduleNotification(prayerTime);
-        }
-    };
-
-    function scheduleNotification(prayerTime) {
-        const [hours, minutes] = prayerTime.split(':');
-        const now = new Date();
-        const prayerDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes, 0);
-
-        const timeToPray = prayerDate.getTime() - now.getTime();
-
-        if (timeToPray > 0) {
-            setTimeout(() => {
-                sendPrayerNotification(`${prayerTime} Prayer Time!`, `It's time for your prayer at ${prayerTime}.`);
-            }, timeToPray);
-        }
+    // Request notification permission if not already granted
+    if (Notification.permission !== "granted") {
+        Notification.requestPermission();
     }
 
-    function sendPrayerNotification(title, message) {
-        if (Notification.permission === 'granted') {
-            new Notification(title, {
-                body: message,
-                icon: 'icon.png' // Optional: URL to an icon
+    // Start real-time checking for prayer times
+    startRealTimePrayerCheck();
+});
+
+document.getElementById("setPrayerTime").onclick = function(event) {
+    const prayerTime = document.getElementById("prayerTime").value;
+
+    if (prayerTime) {
+        const [hours, minutes] = prayerTime.split(':');
+        const now = new Date();
+        const prayerDateTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes, 0);
+
+        // Prevent setting a time in the past
+        if (prayerDateTime <= now) {
+            alert("The selected time is in the past. Please choose a future time.");
+            event.preventDefault();
+            return;
+        }
+
+        // Save the prayer time in local storage
+        addPrayerTimeToStorage(prayerTime);
+
+        const notificationMessage = document.getElementById("notificationMessage");
+        notificationMessage.textContent = `You have set your prayer time to ${prayerTime}.`;
+
+        // Send an immediate notification for confirmation
+        if (Notification.permission === "granted") {
+            sendPrayerNotification("Prayer Time Set", `You have set your prayer time to ${prayerTime}.`);
+        } else {
+            Notification.requestPermission().then(function(permission) {
+                if (permission === 'granted') {
+                    sendPrayerNotification("Prayer Time Set", `You have set your prayer time to ${prayerTime}.`);
+                } else {
+                    alert("Notification permission denied. You won't receive notifications.");
+                }
             });
         }
     }
+};
+
+function startRealTimePrayerCheck() {
+    setInterval(() => {
+        const now = new Date();
+        const currentHours = now.getHours().toString().padStart(2, '0');
+        const currentMinutes = now.getMinutes().toString().padStart(2, '0');
+        const currentTime = `${currentHours}:${currentMinutes}`;
+
+        const prayerTimes = getPrayerTimesFromStorage();
+
+        if (prayerTimes.includes(currentTime)) {
+            sendPrayerNotification("It's Prayer Time!", `It's time for your prayer at ${currentTime}.`);
+            removePrayerTimeFromStorage(currentTime);
+        }
+    }, 60000); // Check every minute
+}
+
+function sendPrayerNotification(title, message) {
+    if (Notification.permission === 'granted') {
+        new Notification(title, {
+            body: message,
+            icon: 'icon.png' // Optional: Add a valid URL for an icon
+        });
+    }
+}
+
+function addPrayerTimeToStorage(prayerTime) {
+    let prayerTimes = getPrayerTimesFromStorage();
+    if (!prayerTimes.includes(prayerTime)) {
+        prayerTimes.push(prayerTime);
+        localStorage.setItem('prayerTimes', JSON.stringify(prayerTimes));
+    }
+}
+
+function getPrayerTimesFromStorage() {
+    return JSON.parse(localStorage.getItem('prayerTimes')) || [];
+}
+
+function removePrayerTimeFromStorage(prayerTime) {
+    let prayerTimes = getPrayerTimesFromStorage();
+    prayerTimes = prayerTimes.filter(time => time !== prayerTime);
+    localStorage.setItem('prayerTimes', JSON.stringify(prayerTimes));
+}
 </script>
 
 {% endblock %}

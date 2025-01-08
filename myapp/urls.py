@@ -34,6 +34,7 @@ urlpatterns = [
     path('delete_prayer/<int:id>/', views.delete_prayer, name='delete_prayer'),
     path('setTime', views.setTime, name='setTime'),
     path('myLikes/', views.myLikes, name='myLikes'),
+    
 
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

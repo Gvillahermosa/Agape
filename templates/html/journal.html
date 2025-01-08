@@ -29,16 +29,16 @@
                     <div class="title-time">
                         <div class="input-group title-group">
                             <label for="note-title">Title:</label>
-                            <input type="text" id="note-title" name="title">
+                            <input type="text" id="note-title" name="title" required>
                         </div>
 
                         <div class="input-group time-group">
                             <label for="note-time">Date:</label>
-                            <input type="date" id="note-time" name="created_date">
+                            <input type="date" id="note-time" name="created_date" required>
                         </div>
                     </div>
                     <label for="note-content">Note:</label>
-                    <textarea id="note-content" name="content" rows="6" cols="55"></textarea>
+                    <textarea id="note-content" name="content" rows="6" cols="55" required></textarea>
 
                     <div class="buttons">
                         <button type="reset">Clear</button>
@@ -49,7 +49,22 @@
           </div>
     </div>
 
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Check for success message in cookies
+            if (document.cookie.split(';').some((item) => item.trim().startsWith('journal_added='))) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Journal added successfully',
+                    showConfirmButton: false,
+                    timer: 1800
+                });
+                // Remove the cookie immediately after showing the message
+                document.cookie = 'journal_added=; Max-Age=0';
+            }
+        });
+    </script>
 {% endblock %}
 
 </html>

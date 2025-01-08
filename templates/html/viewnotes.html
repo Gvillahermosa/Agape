@@ -92,7 +92,9 @@
             <p id="journal-text" style="margin-top: 10px;"></p> <!-- Placeholder for Journal Content -->
         </div>
     </div>
-</div>
+
+
+</div><script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     // JavaScript for handling modal content
     const modal = document.getElementById("journalModal");
@@ -130,6 +132,50 @@
             modal.style.display = "none";
         }
     };
+
+    document.addEventListener("DOMContentLoaded", function() {
+        // Check for success message in cookies
+        if (document.cookie.split(';').some((item) => item.trim().startsWith('journal_added='))) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Journal added successfully',
+                showConfirmButton: false,
+                timer: 1500
+            });
+            // Remove the cookie immediately after showing the message
+            document.cookie = 'journal_added=; Max-Age=0';
+        }
+
+        if (document.cookie.split(';').some((item) => item.trim().startsWith('journal_deleted='))) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Journal deleted successfully',
+                showConfirmButton: false,
+                timer: 1500
+            });
+            // Remove the cookie immediately after showing the message
+            document.cookie = 'journal_deleted=; Max-Age=0';
+        }
+
+        // Attach click event to delete buttons
+        document.querySelectorAll('.delete-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const url = this.getAttribute('data-url');
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, delete it!',
+                    cancelButtonText: 'No, cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = url;
+                    }
+                });
+            });
+        });
+    });
 </script>
 
 {% endblock %}

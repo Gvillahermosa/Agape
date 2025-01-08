@@ -58,7 +58,9 @@ def journal(request):
             created_date=created_date,
             content=content
         )
-        return redirect('journal')  # Redirect to view notes page after saving
+        response = redirect('journal')  # Redirect to view notes page after saving
+        response.set_cookie('journal_added', 'true', max_age=5)  # Set a temporary cookie
+        return response
 
     fname = request.session.get('fname')
     return render(request, "html/journal.html",  {'fname': fname})
@@ -85,11 +87,15 @@ def viewjournal(request):
     })
 
 
+
 @login_required
 def delete_journal(request, entry_id):
     entry = get_object_or_404(JournalEntry, id=entry_id, user=request.user)
     entry.delete()
-    return redirect('viewjournal')
+
+    response = redirect('viewjournal')
+    response.set_cookie('journal_deleted', 'true', max_age=5)  # Set a temporary cookie for deletion
+    return response
 
 def dailyverse(request):
     fname = request.session.get('fname')
@@ -329,8 +335,9 @@ def signin(request):
 
 def signout(request):
     logout(request)
-    messages.success(request, "Log out successfully")
-    return redirect('landing')
+    response = redirect('landing')
+    response.set_cookie('logout_success', 'true', max_age=5)  # Cookie expires after 5 seconds
+    return response
 
 
 

@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agape</title>
     <link rel="stylesheet" href="{% static 'css/landing.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="icon" href="{% static 'images/logo.png' %}" sizes="64x64" type="image/png">
 </head>
 <body>
@@ -107,11 +108,22 @@
             </div>
         </div>
     </div>
-    <script src="{% static 'javascript/index.js' %}"></script>
-    {% if messages %}
     <script>
-        alert("{% for message in messages %}{{ message }}{% endfor %}");
+        document.addEventListener("DOMContentLoaded", function() {
+            if (document.cookie.split(';').some((item) => item.trim().startsWith('logout_success='))) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Log out successfully',
+                    showConfirmButton: false,
+                    timer: 1800
+                });
+                // Remove the cookie immediately after showing the message
+                document.cookie = 'logout_success=; Max-Age=0';
+            }
+        });
     </script>
-{% endif %}
+    <script src="{% static 'javascript/index.js' %}"></script>
+
+
 </body>
 </html>
